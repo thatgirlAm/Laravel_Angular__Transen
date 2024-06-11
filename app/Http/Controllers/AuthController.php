@@ -9,13 +9,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-
     public function register(Request $request){
         return User::create([
             'name'=>$request->input('name'),
             'number'=>$request->input('number'), 
-            'password'=>Hash::make($request->input('password'))
-                ]);
+            'password'=>Hash::make($request->input('password')),
+            'surname'=>$request->input('surname'),
+            'typeDeCompte'=>$request->input('typeDeCompte'),
+            'admin'=>$request->input('admin'),
+            'balance'=>0.0,
+            "dateOfBirth"=>$request->input('dateOfBirth')
+            ]);
     }
 
     public function login(Request $request){
@@ -26,11 +30,12 @@ class AuthController extends Controller
         }
         
         $user = Auth::user();
-        $token = $user->createToken('token')->plainTextToken ;
+       // return $user ; 
+       $token = $user->createToken('token')->plainTextToken ;
         $cookie = cookie('jwt', $token, 60*24);
          return response([
             'message'=> 'sucess'
-         ])->withCookie($cookie);
+         ])->withCookie($cookie); 
     }
 
     public function user(){
