@@ -6,11 +6,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\FormatTrait;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
+    use FormatTrait;
     public function register(Request $request){
-        return User::create([
+        return $this->format(["Enregistrement réussi",true, User::create([
             'name'=>$request->input('name'),
             'number'=>$request->input('number'), 
             'password'=>Hash::make($request->input('password')),
@@ -19,7 +22,7 @@ class AuthController extends Controller
             'admin'=>$request->input('admin'),
             'balance'=>0.0,
             "dateOfBirth"=>$request->input('dateOfBirth')
-            ]);
+            ])]);
     }
 
     public function login(Request $request){
@@ -30,12 +33,10 @@ class AuthController extends Controller
         }
         
         $user = Auth::user();
-       // return $user ; 
+        $userRessource = new UserResource($user);
        $token = $user->createToken('token')->plainTextToken ;
         $cookie = cookie('jwt', $token, 60*24);
-         return response([
-            'message'=> 'sucess'
-         ])->withCookie($cookie); 
+         return response($this->format(['authentification ok', true, [$userRessource]]))->withCookie($cookie); 
     }
 
     public function user(){
