@@ -1,10 +1,10 @@
-// history.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
-import { Observable } from 'rxjs';
-import { tap, switchMap, catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { TransactionService } from '../../services/transaction.service';
+import { HttpClient } from '@angular/common/http';
 
 interface Transaction {
   id: number;
@@ -30,17 +30,13 @@ export class TransactionsComponent implements OnInit {
   name: string | null = localStorage.getItem('name');
   surname: string | null = localStorage.getItem('surname');
 
-  constructor(private transactionService: TransactionService, private router: Router) {
+  constructor(private transactionService: TransactionService, private router: Router, private _http: HttpClient) {
     const storedId = localStorage.getItem('id');
     this.id = storedId ? parseInt(storedId, 10) : null;
   }
 
   ngOnInit(): void {
-    if (this.id) {
-      this.showHistory();
-    } else {
-      this.router.navigate(['login']);
-    }
+    this.showHistory();
   }
 
   showHistory(): void {
@@ -49,6 +45,7 @@ export class TransactionsComponent implements OnInit {
         .subscribe({
           next: (res) => {
             this.transactions = res.data;
+            this.transactions.sort((a, b) => (a.id > b.id ? -1 : 1));
           },
           error: (error) => {
             console.error('Error fetching transaction history:', error);
@@ -59,48 +56,60 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
-  reverse(idTransaction: number): void {
-    this.demandeMdp().pipe(
-      tap((res: any) => localStorage.setItem('mdpReponse', res.status)),
-      switchMap(() => this.reverseOperation(idTransaction)),
-      catchError((error) => {
-        console.error('Error during reverse operation:', error);
-        return [];
-      })
-    ).subscribe();
-  }
-
-  demandeMdp(): Observable<any> {
+  demandeMdp(): Observable<boolean> {
     const password = prompt('Veuillez entrer votre mot de passe pour confirmer : ');
     const number = localStorage.getItem('number');
-    if (this.id && password && number) {
-      return this.transactionService.requestPasswordConfirmation(this.id, number, password);
-    } else {
-      console.error('Password or number not provided.');
-      return new Observable();
+    const userData = { number, password };
+    console.log(userData);
+    return this._http.post<any>(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`, userData).pipe(
+      map((res) => {
+        console.log(res);
+        
+        localStorage.setItem('mdpReponse', res.status);
+        console.log(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`);
+;        return res.status;
+      }),
+      catchError((error) => {
+        console.error('Error during password confirmation:', error);
+        return of(false);
+      })
+    );
+  }
+  
+
+  reverseOperation(idTransaction: number): void {
+    const confirmation = confirm(`Vous allez demander le reverse de la transaction numéro : ${idTransaction}`);
+    console.log(localStorage.getItem('mdpReponse'));
+    if (confirmation) {
+      if (localStorage.getItem('mdpReponse') === 'true') {
+        this._http.delete(`http://127.0.0.1:8000/api/transactions/${idTransaction}`)
+          .subscribe({
+            next: (res: any) => {
+              alert(res.message);
+            },
+            error: (error) => {
+              console.error('Error during transaction reversal:', error);
+            }
+          });
+      } else {
+        console.log('reverse échoué');
+      }
     }
   }
 
-  reverseOperation(idTransaction: number): Observable<any> {
-    const mdpReponse = localStorage.getItem('mdpReponse');
-    if (mdpReponse === 'true') {
-      return this.transactionService.reverseTransaction(idTransaction).pipe(
-        tap((res: any) => {
-          alert(res.message);
-          this.transactions = this.transactions.filter(transaction => transaction.id !== res.data.id);
-          localStorage.removeItem('mdpReponse');
-        }),
-        catchError((error) => {
-          console.error('Error during delete operation:', error);
-          return [];
-        })
-      );
-    } else {
-      console.error('Password confirmation failed or missing.');
-      return new Observable();
-    }
+  reverse(idTransaction: number): void {
+    this.demandeMdp().subscribe((isPasswordConfirmed) => {
+      if (isPasswordConfirmed) {
+        this.reverseOperation(idTransaction);
+      } else {
+        console.log('Mot de passe incorrect ou non confirmé.');
+      }
+      localStorage.removeItem('mdpReponse');
+    });
   }
+  
 
-  lookforDest($id: number): void {
+  lookforDest(id: number): void {
+    // TODO: Implement this method if needed
   }
 }

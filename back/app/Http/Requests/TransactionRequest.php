@@ -23,9 +23,8 @@ class TransactionRequest extends FormRequest
     {
         return [
             'idUserExp' => 'required|integer',
-            'idUserDest' => 'required|integer',
+            'idUserDest' => 'required|integer|sometimes',
             'amount' => 'required', 
-            'date' => 'required',
             'type' => 'required|string',
             
         ];

@@ -8,6 +8,7 @@ import { NewtransactionComponent } from './pages/new-transaction/new-transaction
 import { TransactionSucessComponent } from './pages/transaction-sucess/transaction-sucess.component';
 import { AuthGuardGuard } from './auth-guard.guard';
 import { AntiAuthGuard} from './anti-auth.guard';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 export const routes: Routes = [
     { 
@@ -32,7 +33,10 @@ export const routes: Routes = [
         path: 'newtransaction', component: NewtransactionComponent, canActivate:[AuthGuardGuard]
     },
     { 
-        path: 'transactionSucess', component: TransactionSucessComponent, canActivate:[AuthGuardGuard]
+        path: 'transaction-success', component: TransactionSucessComponent, canActivate:[AuthGuardGuard]
+    },
+    { 
+        path: 'settings', component: SettingsComponent, canActivate:[AuthGuardGuard]
     }
 
 ];

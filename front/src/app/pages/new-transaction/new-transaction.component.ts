@@ -35,6 +35,7 @@ export class NewtransactionComponent implements OnInit {
     });
   }
 
+ 
   selectIsTransfert(): void {
     const selected = this.transactionForm.get('type')?.value;
     this.isTransfert = selected === 'transfert';
@@ -79,12 +80,18 @@ export class NewtransactionComponent implements OnInit {
       this.transaction.idUserDest = localStorage.getItem('idUserDest') ? parseInt(storedIdUserDest, 10) : 0;
     }
     this.transactionService.validateTransaction(this.transaction).subscribe((res: any) => {
-      console.log(this.transaction);
-      localStorage.removeItem('idUserDest');
-      localStorage.removeItem('destChecked');
-      localStorage.removeItem('typeDecompteDestTemp');
-      localStorage.removeItem('destNumber');
-      this.router.navigate(['transactionSuccess']);
+      if(res.status){
+        console.log(this.transaction);
+        localStorage.removeItem('idUserDest');
+        localStorage.removeItem('destChecked');
+        localStorage.removeItem('typeDecompteDestTemp');
+        localStorage.removeItem('destNumber');
+        this.router.navigate(['transaction-success']);
+      }
+      else{
+        alert(res.message);
+        this.ngOnInit();
+      }
     });
   }
 }

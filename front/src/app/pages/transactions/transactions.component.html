@@ -1,1 +1,29 @@
-<p>transactions works!</p>
+<div class="content">
+    <fieldset class="formulaire">
+      <h2 class="title">Historique de mes transferts</h2>
+      <div class="infos">
+        <div *ngFor="let transaction of transactions">
+          <div class="transaction" *ngIf="!transaction.reversed">
+            <div class="transaction-content">
+              <ul class="id_transactions_index">
+                <li><strong>Id opération:</strong> {{ transaction.id }}</li>
+                <li><strong>Montant:</strong> {{ transaction.amount | number }} XOF</li>
+                <li><strong>Date:</strong> {{ transaction.created_at | date:'longDate' }}</li>
+                <li><strong>Type:</strong> {{ transaction.type }}</li>
+                <li *ngIf="transaction.type === 'transfert'"><strong>Destinataire:</strong> {{ transaction.idUserDest }}</li>
+                <li *ngIf="transaction.type === 'transfert'">
+                  <button type="button" (click)="reverse(transaction.id)">Reverse</button>
+                </li>
+              </ul>
+            </div>
+            <div class="transaction-image">
+              <img *ngIf="transaction.type === 'retrait'" src="https://th.bing.com/th/id/OIP.UX0TQzhqOfgSTZAlumimAwHaHa?rs=1&pid=ImgDetMain" alt="Image retrait">
+              <img *ngIf="transaction.type === 'depot'" src="https://static.vecteezy.com/system/resources/previews/016/742/074/non_2x/line-icon-for-cheapest-vector.jpg" alt="Image dépôt">
+              <img *ngIf="transaction.type === 'transfert'" src="https://th.bing.com/th/id/OIP.B-R2R8XXuWb6EtRxt3ad-gHaHa?rs=1&pid=ImgDetMain" alt="Image transfert">
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  

@@ -2,10 +2,9 @@
 
 namespace App\Observers;
 
-use App\Http\Controllers\UserController;
 use App\Models\Transaction;
 use App\Models\User;
-use Illuminate\Http\Request;
+
 class TransactionObserver
 {
     /**
@@ -13,21 +12,23 @@ class TransactionObserver
      */
     public function created(Transaction $transaction): void
     {
-        $exp = User::find($transaction->exp);
-        if($transaction->type=="transfert" | $transaction->type=="depot" ){
-            $exp->balance -= $transaction->amount;
-            if($transaction->dest!=0){
-                $dest = User::find($transaction->dest); 
-                $dest->balance += $transaction->amount;
-                $dest->save();  
-        }
-        }
-         else{
-            $exp->balance -= $transaction->amount;
-        }
+
+        $exp = User::find($transaction->idUserExp);
+        if ($exp) {
+            if($transaction->type="transfert" || $transaction->type="retrait"){
+            $exp->balance -= $transaction->amount;}
+            else{
+                $exp->balance += $transaction->amount;}
+            
         $exp->save();
-        
-        
+    }
+        if ($transaction->idUserDest) {
+            $dest = User::find($transaction->idUserDest);
+            if ($dest) {
+                $dest->balance += $transaction->amount;
+                $dest->save();
+            }
+        }
     }
 
     /**
@@ -35,30 +36,36 @@ class TransactionObserver
      */
     public function updated(Transaction $transaction): void
     {
-        //
+        // Logic for updated event if needed
     }
 
     /**
      * Handle the Transaction "deleted" event.
      */
-
-
-     //--Reverse--//
     public function deleted(Transaction $transaction): void
     {
+        // Reverser la transaction
         $exp = User::find($transaction->idUserExp);
-        if($transaction->type=="transfert"){
-            $dest = User::find($transaction->idUserDest);
-            $dest->balance -= $transaction->amount;
+        if ($exp) {
+            $exp->balance += $transaction->amount;
+            $exp->save();
         }
-        $exp->balance += $transaction->amount; 
-}
+
+        if ($transaction->idUserDest) {
+            $dest = User::find($transaction->idUserDest);
+            if ($dest) {
+                $dest->balance -= $transaction->amount;
+                $dest->save();
+            }
+        }
+    }
+
     /**
      * Handle the Transaction "restored" event.
      */
     public function restored(Transaction $transaction): void
     {
-        //
+        // Logic for restored event if needed
     }
 
     /**
@@ -66,6 +73,6 @@ class TransactionObserver
      */
     public function forceDeleted(Transaction $transaction): void
     {
-        //
+        // Logic for force deleted event if needed
     }
 }

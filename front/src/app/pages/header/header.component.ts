@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit {
   }
 
   showParameters() {
-    // Implémentation nécessaire pour afficher les paramètres
+    this.router.navigate(['settings']);
   }
 
   putNewTransaction() {

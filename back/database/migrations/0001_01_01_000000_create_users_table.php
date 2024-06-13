@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->date('dateOfBirth');
-            $table->double('balance')->default(0.0);
+            $table->double('balance')->default(1000);
             $table->enum('typeDeCompte', ['orangeMoney', 'wave']);
             $table->binary('photo')->default('\x89504E470D0A1A0A0000000D');
             $table->enum('admin', ['yes', 'no']);         

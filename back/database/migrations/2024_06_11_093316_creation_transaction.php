@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('idUserExp')->constrained('users', 'id');
-            $table->integer('idUserDest');
+            $table->integer('idUserDest')->nullable();
             $table->double('amount');
             $table->enum('type', ['retrait', 'depot', 'transfert', 'reverse']);
             $table->integer('idOperator')->nullable();

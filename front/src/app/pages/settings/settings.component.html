@@ -1,1 +1,17 @@
-<p>settings works!</p>
+<div class="content">
+    <div class="formulaire">
+        <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()" action="POST">
+            <ul class="infos">
+                <li>
+                  <label for="name">Nom :</label>
+                  <input type="string" id="amount" formControlName="name" placeholder={{this.name}}>
+                </li>
+                <li>
+                  <label for="type">Type de transaction :</label>
+                </li>
+              </ul>
+              <button type="submit">Valider les changements</button>
+
+        </form>
+    </div>
+</div>

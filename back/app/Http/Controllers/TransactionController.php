@@ -27,15 +27,7 @@ class TransactionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(TransactionRequest $request)
+    public function create(TransactionRequest $request)
     {
         $dest = User::where('id',$request->idUserDest)->first();
         $exp = User::find($request->idUserExp);
@@ -59,7 +51,45 @@ class TransactionController extends Controller
             ]);
             $transactionResource = new TransactionResource($transaction);
             return $this->format(['transaction enregistrée', true, $transactionResource]) ;
-     });
+     });}
+    /**
+     * Store a newly created resource in storage.
+     */public function store(TransactionRequest $request)
+    {
+        $dest = null;
+        if ($request->idUserDest) {
+            $dest = User::find($request->idUserDest);
+            if (!$dest) {
+                return $this->formatError("Utilisateur destinataire non trouvé");
+            }
+        }
+        
+        $exp = User::find($request->idUserExp);
+        if (!$exp) {
+            return $this->formatError("Utilisateur expéditeur non trouvé");
+        }
+
+        if ($request->type == 'transfert' || $request->type == 'retrait') {
+            if ($exp->balance < $request->amount) {
+                return $this->formatError("Solde insuffisant");
+            }
+        }
+
+        return DB::transaction(function() use($request, $dest) {
+            $transaction = Transaction::create([
+                'idUserExp' => $request->idUserExp,
+                'amount' => $request->amount,
+                'date' => $request->date,
+                'type' => $request->type,
+                'idOperator' => $request->idOperator,
+                'idUserDest' => $dest ? $dest->id : null,
+            ]);
+
+            $transactionResource = new TransactionResource($transaction);
+            return $this->format(['transaction enregistrée', true, $transactionResource]);
+        });
+
+
         
        
        
@@ -117,7 +147,8 @@ class TransactionController extends Controller
     public function reverseTransaction(Request $request){
         $url = explode('/',$request->getPathInfo());
         $id= end($url);
-        $transaction = Transaction::find($id);
+        $transaction = Transaction::find($id);  
+        //$transaction = Transaction::find($request->id);
         $userDest = User::find($transaction->idUserDest);
         $balanceUserDest = $userDest->balance;
         $dateTransaction = $transaction->created_at;

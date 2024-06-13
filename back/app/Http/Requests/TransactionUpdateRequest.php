@@ -24,9 +24,9 @@ class TransactionUpdateRequest extends FormRequest
         return [
             'idUserExp' => 'required|sometimes|integer',
             'idUserDest' => 'required|sometimes|integer',
-            'amount' => 'required|sometimes', 
-            'date' => 'required|sometimes',
-            'type' => 'required|string',
+            'amount' => 'required|sometimes|integer', 
+            'date' => 'required|sometimes|date',
+            'type' => 'required|string| sometimes',
             
         ];
     }

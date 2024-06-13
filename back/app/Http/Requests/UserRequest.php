@@ -23,9 +23,9 @@ class UserRequest extends FormRequest
     {
         return [
             "number"=> "required|integer",
-            "name"=> "required|string",
-            "surname"=>"required|string",
-            "typeDeCompte"=>"required|string"
+            "name"=> "required|string|sometimes",
+            "surname"=>"required|string|sometimes",
+            "typeDeCompte"=>"required|string|sometimes"
         ];
     }
 }
