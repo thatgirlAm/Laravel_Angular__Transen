@@ -14,11 +14,20 @@ class TransactionObserver
     public function created(Transaction $transaction): void
     {
         $exp = User::find($transaction->exp);
-        $dest = User::find($transaction->dest);
-        $exp->balance -= $transaction->amount;
-        $dest->balance += $transaction->amount;     
-        $dest->save();  
+        if($transaction->type=="transfert" | $transaction->type=="depot" ){
+            $exp->balance -= $transaction->amount;
+            if($transaction->dest!=0){
+                $dest = User::find($transaction->dest); 
+                $dest->balance += $transaction->amount;
+                $dest->save();  
+        }
+        }
+         else{
+            $exp->balance -= $transaction->amount;
+        }
         $exp->save();
+        
+        
     }
 
     /**

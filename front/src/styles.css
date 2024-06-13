@@ -1,0 +1,51 @@
+.content {
+    margin: auto;
+    padding: 5%;
+    color: #252525;
+    width: 70%;
+    height: 100%;
+}
+
+
+.content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px; 
+}
+.title{
+        color: #F9F6EE;
+        margin-right: 5%;
+        padding: 5%;
+    }
+
+body{
+    background-color: #56a28e;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.formulaire{
+    background-color: #252525ae;
+    border-radius: 15px;
+    width: 75%;
+    margin: auto;
+    height: 100%;
+    
+
+}
+
+
+.infos {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    list-style: none;
+    
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out;
+    height: 75%;
+    width: 75%;
+    margin-left:auto;
+    margin-right: auto;
+}

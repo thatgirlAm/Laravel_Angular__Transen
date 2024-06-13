@@ -1,0 +1,28 @@
+
+<div class="content">
+    <fieldset class="formulaire">
+      <h2 class="title">Nouvelle transaction</h2>
+      <form [formGroup]="transactionForm" (ngSubmit)="destCheck()">
+        <ul class="infos">
+          <li>
+            <label for="amount">Montant :</label>
+            <input type="number" id="amount" formControlName="amount" placeholder="montant">
+          </li>
+          <li>
+            <label for="type">Type de transaction :</label>
+            <select id="type" formControlName="type" (change)="selectIsTransfert()">
+              <option value="retrait">Retrait</option>
+              <option value="transfert">Transfert</option>
+              <option value="depot">Dépôt</option>
+            </select>
+          </li>
+          <li class="recipient" *ngIf="isTransfert">
+            <label for="recipient">Numéro destinataire :</label>
+            <input type="number" id="recipient" formControlName="recipient" placeholder="numéro destinataire">
+          </li>
+        </ul>
+        <button type="submit">Valider la transaction</button>
+      </form>
+    </fieldset>
+  </div>
+  

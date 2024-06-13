@@ -1,0 +1,14 @@
+.app{
+    display: flexbox;
+    flex-direction: row;
+}
+
+.app > div{
+    align-items: flex-end;
+    align-content: space-between;
+}
+@media (max-width: 800px) {
+    .app {
+      flex-direction: column;
+    }
+  }

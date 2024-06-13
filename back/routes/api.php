@@ -10,12 +10,12 @@ use App\Http\Controllers\UserController;
 //-----Routes with no particuliar access needed----//
 Route::post("/register", [AuthController::class, 'register']);
 Route::post("/login", [AuthController::class, 'login']);
-
-
+Route::post("/logout", [AuthController::class, 'logout']);
+Route::get('/check', [AuthController::class, 'isLoggedIn']);
 //----Routes with Access required---------//
 Route::middleware('auth:sanctum')->group(function(){
     
-    //----------Functions-----------//
+    //----------Funct   ions-----------//
     
     Route::get("/user", [AuthController::class, 'user']);
     Route::get('users/history/{id}', [UserController::class, 'showHistory']);

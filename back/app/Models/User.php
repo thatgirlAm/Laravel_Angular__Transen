@@ -27,7 +27,8 @@ class User extends Authenticatable
         'photo',
         'typeDeCompte',
         'admin',
-        'balance'
+        'balance',
+        'token'
 
     ];
 

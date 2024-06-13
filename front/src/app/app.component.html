@@ -1,0 +1,10 @@
+<div class="app">
+  <div><ng-container *ngIf="!isLoginPage()">
+    <ng-container *ngIf="!isSignupPage()">
+    <app-header/></ng-container>
+    </ng-container>
+  </div>
+    <div>
+      <router-outlet ngSkipHydration></router-outlet>
+    </div>
+</div>

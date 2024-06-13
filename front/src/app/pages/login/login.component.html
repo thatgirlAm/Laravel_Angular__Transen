@@ -1,0 +1,10 @@
+<div class="form-container sign-in-container">
+    <form action="#" method=POST>
+        <h1>Connexion</h1>
+        <span><a href="signup">Inscription </a></span>
+  <label for="labelNumber" class="labels">Votre numéro : </label>
+        <input type="number" [(ngModel)]="loginObj.number" name="number" placeholder="77*******"/>
+  <label for="labelPassword" class="labels">Votre mot de passe : </label>
+        <input class="password" [(ngModel)]="loginObj.password" type="password" name="password" placeholder="············"/>
+        <button type="button" (click)="onLogin()">Se connecter</button>
+    </form>
