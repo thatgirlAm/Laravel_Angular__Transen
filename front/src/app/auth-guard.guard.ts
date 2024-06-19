@@ -9,9 +9,9 @@ export const AuthGuardGuard: CanActivateFn = (route, state) => {
 
     if(!auth.checkLogin()) {
         router.navigateByUrl('/login');
-        console.log('Access denied');
+        //console.log('Access denied');
         return false;
     }
-    console.log('Access granted');
+    //console.log('Access granted');
     return true;
 };

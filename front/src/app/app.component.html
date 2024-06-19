@@ -1,7 +1,8 @@
 <div class="app">
   <div><ng-container *ngIf="!isLoginPage()">
     <ng-container *ngIf="!isSignupPage()">
-    <app-header/></ng-container>
+  
+    <app-header (nchange)="validateTransaction()"/></ng-container>
     </ng-container>
   </div>
     <div>

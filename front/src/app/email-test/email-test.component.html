@@ -1,0 +1,9 @@
+<form #formRef="ngForm" (ngSubmit)="onSubmit()">
+    <label for="email">Adresse email :</label><br>
+    <input type="email" id="email" [(ngModel)]="email" name="email" required #emailRef="ngModel"><br>
+    <div *ngIf="emailRef.invalid && emailRef.touched">
+      <div *ngIf="emailRef.errors?.required">L'adresse email est obligatoire</div>
+    </div>
+    <button type="submit">Envoyer</button>
+  </form>
+  

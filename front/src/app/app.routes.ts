@@ -9,6 +9,8 @@ import { TransactionSucessComponent } from './pages/transaction-sucess/transacti
 import { AuthGuardGuard } from './auth-guard.guard';
 import { AntiAuthGuard} from './anti-auth.guard';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { ChangeSettingsComponent } from './change-settings/change-settings.component';
+import { SignupComponent } from './signup/signup.component';
 
 export const routes: Routes = [
     { 
@@ -18,7 +20,7 @@ export const routes: Routes = [
         path: 'login', component: LoginComponent, canActivate:[AntiAuthGuard]
     },
     { 
-        path: 'signup', component: RegisterComponent , //canActivate:[AuthGuard]
+        path: 'signup', component: SignupComponent , canActivate:[AntiAuthGuard]
     },
     { 
         path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuardGuard]
@@ -37,6 +39,9 @@ export const routes: Routes = [
     },
     { 
         path: 'settings', component: SettingsComponent, canActivate:[AuthGuardGuard]
+    },
+    { 
+        path: 'change-settings', component: ChangeSettingsComponent, canActivate:[AuthGuardGuard]
     }
 
 ];

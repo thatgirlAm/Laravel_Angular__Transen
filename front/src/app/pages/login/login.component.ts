@@ -21,6 +21,9 @@ export class LoginComponent implements OnInit {
     localStorage.clear();
   }
 
+  RedirectSignup(){
+    this.router.navigate(['signup']);
+  }
   onLogin() {
     console.log(this.loginObj);
     
@@ -28,8 +31,8 @@ export class LoginComponent implements OnInit {
       next: (res: any) => {
         if (res.status) {
           console.log(res);
-          
           localStorage.setItem('token', res.data.token);
+          localStorage.setItem('balance', res.data.balance);
           localStorage.setItem('number', res.data.number);
           localStorage.setItem('id', res.data.id);
           localStorage.setItem('name', res.data.name);

@@ -12,10 +12,12 @@ Route::post("/register", [AuthController::class, 'register']);
 Route::post("/login", [AuthController::class, 'login']);
 Route::post("/logout", [AuthController::class, 'logout']);
 Route::get('/check', [AuthController::class, 'isLoggedIn']);
+Route::apiResource("/users", UserController::class)->only('store');
+
 //----Routes with Access required---------//
 Route::middleware('auth:sanctum')->group(function(){
     
-    //----------Funct   ions-----------//
+    //----------Functions-----------/
     
     Route::get("/user", [AuthController::class, 'user']);
     Route::get('users/history/{id}', [UserController::class, 'showHistory']);
@@ -29,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function(){
     
     //-----APIs RESOURCE------//
     Route::apiResource("/transactions", TransactionController::class);
-    Route::apiResource("/users", UserController::class);
+    Route::apiResource("/users", UserController::class)->except('store');
 
 });
 

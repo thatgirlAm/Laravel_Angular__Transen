@@ -11,6 +11,7 @@ use App\Http\Resources\TransactionResource;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Requests\TransactionUpdateRequest;
 use DB;
+use Auth;
 
 class TransactionController extends Controller
 {
@@ -63,16 +64,21 @@ class TransactionController extends Controller
                 return $this->formatError("Utilisateur destinataire non trouvé");
             }
         }
-        
         $exp = User::find($request->idUserExp);
         if (!$exp) {
             return $this->formatError("Utilisateur expéditeur non trouvé");
+        }
+        if($request->type == "transfert" && !($dest->typeDeCompte == $exp->typeDeCompte)){
+            return $this->formatError('Types de comptes non correspondants') ; 
         }
 
         if ($request->type == 'transfert' || $request->type == 'retrait') {
             if ($exp->balance < $request->amount) {
                 return $this->formatError("Solde insuffisant");
             }
+        }
+        if($request->amount<0){
+            return $this->formatError('Montant négatif');
         }
 
         return DB::transaction(function() use($request, $dest) {
@@ -139,6 +145,13 @@ class TransactionController extends Controller
         //-----Ici, au lieu de supprimer la transaction, on la reverse simplement----//
         $transaction->reversed = 1 ; 
         $transaction->save();
+        $user = Auth::user();
+        
+        if($transaction->type =="transfert"){
+            $user->balance += $transaction->amount;
+            $user->save();
+        }
+
        // $transaction->delete(); 
         return $this->format(['Transaction reversed', true, $transaction]);
     }
@@ -146,7 +159,7 @@ class TransactionController extends Controller
     //----------------Autres fonctions-----------------//
     public function reverseTransaction(Request $request){
         $url = explode('/',$request->getPathInfo());
-        $id= end($url);
+        $id= end($url); 
         $transaction = Transaction::find($id);  
         //$transaction = Transaction::find($request->id);
         $userDest = User::find($transaction->idUserDest);
@@ -155,7 +168,7 @@ class TransactionController extends Controller
         $date = new Date();
         $amount= $transaction->amount;
         if($transaction){
-            if($balanceUserDest>=$amount && $dateTransaction<$date-15*24*60*60){
+            if($balanceUserDest>=$amount && $dateTransaction<$date-5*60){
             $transaction->reverse1();
             return $this->format(['Reverse effectué', true, ['amount'=>$amount, 'userDest'=>$userDest]]);
             }

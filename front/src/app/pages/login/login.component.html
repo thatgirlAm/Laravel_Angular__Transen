@@ -1,7 +1,7 @@
-<div class="form-container sign-in-container">
+<div class="form-container">
     <form action="#" method=POST>
         <h1>Connexion</h1>
-        <span><a href="signup">Inscription </a></span>
+        <span (click)="RedirectSignup()">Inscription</span>
   <label for="labelNumber" class="labels">Votre numéro : </label>
         <input type="number" [(ngModel)]="loginObj.number" name="number" placeholder="77*******"/>
   <label for="labelPassword" class="labels">Votre mot de passe : </label>

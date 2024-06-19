@@ -4,16 +4,18 @@ export class SignUp {
     password: string;
     name: string;
     surname: string;
-    accountType: boolean;
-    bornOn: Date;
+    typeDeCompte: boolean;
+    dateOfBirth: Date;
+    balance: number;
   
     constructor() {
       this.number = 0;
       this.password = '';
       this.name = '';
       this.surname = '';
-      this.accountType = false;
-      this.bornOn = new Date();
+      this.typeDeCompte = false;
+      this.dateOfBirth = new Date();
+      this.balance = 0;
     }
   }
   

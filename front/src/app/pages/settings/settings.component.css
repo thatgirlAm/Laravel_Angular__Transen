@@ -1,0 +1,17 @@
+.infos > div {
+padding: 20px;
+}
+
+.infos {
+    display: flex;
+    flex-direction: column;
+  }
+  
+ul{
+    list-style-type: none;
+}
+
+._infos{
+
+    margin-top: 5px;
+}

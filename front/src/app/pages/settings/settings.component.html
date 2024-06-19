@@ -1,17 +1,49 @@
-<div class="content">
+<!-- <div class="content">
     <div class="formulaire">
-        <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()" action="POST">
-            <ul class="infos">
+<fieldset class="infos">
+            <ul>
                 <li>
-                  <label for="name">Nom :</label>
-                  <input type="string" id="amount" formControlName="name" placeholder={{this.name}}>
+                  <label><p>Prénom :
+                  {{name}}</p></label>
                 </li>
                 <li>
-                  <label for="type">Type de transaction :</label>
+                    <label><p> Nom :
+                    {{surname}}</p></label>
+                  </li>
+                  <li>
+                    <label><p>Type de compte :
+                    {{typeDeCompte}}</p></label>
+                  </li>
+                  <li>
+                    <label><p>Numéro :
+                    {{number}}</p></label>
+                  </li>            
+                </ul>
+</fieldset>
+<div class="_infos">
+<div class="infos"> 
+    <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()" action="POST">
+              <ul>
+                <li>
+                  <label for="newName">Prénom :</label>
+                  <input type="string" id="newName" formControlName="newName" placeholder={{settings?.name}}>
                 </li>
-              </ul>
-              <button type="submit">Valider les changements</button>
-
-        </form>
-    </div>
-</div>
+                <li>
+                    <label for="newSurname">Nom :</label>
+                    <input type="string" id="newSurname" formControlName="newSurName" placeholder={{settings?.surname}}>
+                  </li>
+                  <li>
+                    <label for="typeDeCompte">Type de compte :</label>
+                    <input type="string" id="typeDeCompte" formControlName="typeDeCompte" placeholder={{settings?.typeDeCompte}}>
+                  </li>
+                  <li>
+                    <label for="number">Number :</label>
+                    <input type="string" id="number" formControlName="number" placeholder={{settings?.number}}>
+                  </li>
+                  <li>
+                    <button type="button" onclick="formulaire()">changer des données</button>
+                  </li>
+                  <li><button type="submit">Valider les changements</button>
+        </li></ul>
+    </form>
+</div></div></div> -->

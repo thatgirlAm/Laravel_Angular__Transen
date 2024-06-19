@@ -15,9 +15,10 @@ class TransactionObserver
 
         $exp = User::find($transaction->idUserExp);
         if ($exp) {
-            if($transaction->type="transfert" || $transaction->type="retrait"){
-            $exp->balance -= $transaction->amount;}
-            else{
+            if($transaction->type=="transfert" || $transaction->type=="retrait"){
+            $exp->balance -= $transaction->amount;
+        }
+            elseif($transaction->type=="depot"){
                 $exp->balance += $transaction->amount;}
             
         $exp->save();
@@ -44,7 +45,7 @@ class TransactionObserver
      */
     public function deleted(Transaction $transaction): void
     {
-        // Reverser la transaction
+        //--Reverser la transaction--//
         $exp = User::find($transaction->idUserExp);
         if ($exp) {
             $exp->balance += $transaction->amount;

@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { TransactionService } from '../../services/transaction.service';
 import { HttpClient } from '@angular/common/http';
+import { ServerServiceService } from '../../server-service.service';
 
 interface Transaction {
   id: number;
@@ -30,7 +31,7 @@ export class TransactionsComponent implements OnInit {
   name: string | null = localStorage.getItem('name');
   surname: string | null = localStorage.getItem('surname');
 
-  constructor(private transactionService: TransactionService, private router: Router, private _http: HttpClient) {
+  constructor(private transactionService: TransactionService, private serverService : ServerServiceService, private router: Router, private _http: HttpClient) {
     const storedId = localStorage.getItem('id');
     this.id = storedId ? parseInt(storedId, 10) : null;
   }
@@ -48,7 +49,7 @@ export class TransactionsComponent implements OnInit {
             this.transactions.sort((a, b) => (a.id > b.id ? -1 : 1));
           },
           error: (error) => {
-            console.error('Error fetching transaction history:', error);
+            console.error("Erreur lors du chargement de l'historique", error);
           }
         });
     } else {
@@ -58,20 +59,20 @@ export class TransactionsComponent implements OnInit {
 
   demandeMdp(): Observable<boolean> {
     const password = prompt('Veuillez entrer votre mot de passe pour confirmer : ');
+   if(!password){
+    return of(false);
+   }
     const number = localStorage.getItem('number');
     const userData = { number, password };
-    console.log(userData);
     return this._http.post<any>(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`, userData).pipe(
       map((res) => {
-        console.log(res);
-        
-        localStorage.setItem('mdpReponse', res.status);
-        console.log(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`);
+      console.log(res);
+      localStorage.setItem('mdpReponse', res.status);
 ;        return res.status;
       }),
       catchError((error) => {
-        console.error('Error during password confirmation:', error);
-        return of(false);
+        console.error('Erreur lors de la confirmation du mot de passe.', error);
+        return of(false); 
       })
     );
   }
@@ -86,6 +87,9 @@ export class TransactionsComponent implements OnInit {
           .subscribe({
             next: (res: any) => {
               alert(res.message);
+              this.transactions = this.transactions.filter(transaction=>transaction.id!==idTransaction);
+              this.serverService.refreshBalance(res.data.amount, 'depot');
+              console.log(this.transactions);
             },
             error: (error) => {
               console.error('Error during transaction reversal:', error);
@@ -99,9 +103,11 @@ export class TransactionsComponent implements OnInit {
 
   reverse(idTransaction: number): void {
     this.demandeMdp().subscribe((isPasswordConfirmed) => {
+      console.log(isPasswordConfirmed);
       if (isPasswordConfirmed) {
         this.reverseOperation(idTransaction);
       } else {
+        alert("Mot de passe incorrect");
         console.log('Mot de passe incorrect ou non confirmé.');
       }
       localStorage.removeItem('mdpReponse');

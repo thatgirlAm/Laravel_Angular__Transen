@@ -8,13 +8,13 @@ import { RegisterComponent } from './pages/register/register.component';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TransactionSucessComponent } from './pages/transaction-sucess/transaction-sucess.component';
-
+import { ChangeSettingsComponent } from './change-settings/change-settings.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule,DashboardComponent, HeaderComponent, CommonModule, RegisterComponent, TransactionsComponent, TransactionSucessComponent],
+  imports: [RouterOutlet, DashboardComponent, HeaderComponent, CommonModule, RegisterComponent,ChangeSettingsComponent, TransactionsComponent, TransactionSucessComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'] ,
   host: { 'ngSkipHydration': '' } //--Résolution de problème en skippant ce phénomène--//
@@ -24,12 +24,16 @@ export class AppComponent  {
   constructor(private router: Router) {}
  
   
-  //--Méthode pour savoir quand faire apparaître le menu--//
+  //--Méthode pour savoir quand faire apparaître de destinataire dans le menu--//
   isLoginPage(): boolean {
     return this.router.url === '/login'; 
   }
   isSignupPage(): boolean {
     return this.router.url === '/signup'; 
+  }
+
+  validateTransaction(): void {
+  
   }
 }
 

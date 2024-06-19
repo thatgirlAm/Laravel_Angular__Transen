@@ -159,10 +159,10 @@ else
 
 public function confirmPassword(UserRequest $request){
 $userData = $request->only('number','password');
-//$user= $this->findByNumber($request)->data;
-if(Auth::guard('web')->attempt($userData)){
+
+ $_Ok = Auth::guard('web')->attempt($userData);
+if($_Ok){
         return $this->format(['authentification ok', true, true]);
     }
-return $this->formatError("authentification");
-}
+return $this->formatError("authentification");} 
 }

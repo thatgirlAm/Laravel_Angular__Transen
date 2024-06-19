@@ -12,8 +12,8 @@ class UserObserver
     public function created(User $user): void
     {
         //dd($user);
-        $user->name="sali";
-        $user->save();
+        //$user->name="sali";
+        //$user->save();
     }
 
     /**
@@ -21,7 +21,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        dd($user);
+        //dd($user);
     }
 
     /**

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Login } from '../pages/log-in';
+import { SignUp } from '../pages/sign-up';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,22 @@ export class AuthService {
   
   constructor(private http: HttpClient, private router: Router) {}
 
+  register(registerForm : SignUp){
+    return this.http.post<any>(`${this.apiUrl}/register`, registerForm).pipe(
+      tap(res => {
+        console.log(res);
+        if(res.status){
+          alert('Compte créé ! Vous pouvez désormais vous connecter.')
+          this.router.navigate(['login']);
+        }
+      })
+    );
+  }
   login(loginData: Login): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
-      tap(response => {
-        if (response.token) {
-          localStorage.setItem('token', response.token);
+      tap(res => {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
           
         }
       })

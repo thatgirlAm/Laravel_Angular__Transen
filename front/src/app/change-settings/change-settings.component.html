@@ -1,0 +1,34 @@
+<form class="formulaire" action="POST" [formGroup]="userForm">
+    <div class="infos">
+    <div>
+        <label>Nom : 
+        <input type="text" placeholder="votre nom...." formControlName="name"></label>
+    </div>
+    <div>
+        <label>Prénom : 
+        <input type="text" placeholder="votre prénom...." formControlName="surname"></label>
+    </div>
+    <div>
+        <label>Numéro : 
+        <input type="number" placeholder="votre numéro...." formControlName="number"></label>
+    </div>
+    <div>
+        <label>Date de Naissance : 
+        <input type="date" placeholder="votre date de naissance...." formControlName="dateOfBirth"></label>
+    </div>
+    <div>
+        <label>Password </label>
+        <input type="text" placeholder="votre nouveau mot de passe...." formControlName="password">
+        
+        <div class="warningText" *ngIf="userForm.controls['password'].invalid && isFormSubmetted"> 
+            <small style="color: red;">
+                <span *ngIf="userForm.controls['password'].errors?.['minlength']">Le mot de passe est trop court</span>
+                <span *ngIf="userForm.controls['password'].errors?.['maxlength']">Le mot de passe est trop long</span>
+                <span *ngIf="userForm.controls['password'].errors?.['pattern']">Le mot de passe est trop court</span>
+                <span *ngIf="userForm.controls['password'].errors?.['required']">Le mot de passe est requis</span>
+
+            </small>
+        </div>
+    </div>
+    <button type="button" (click)="onsubmit()">Valider</button></div>
+</form>

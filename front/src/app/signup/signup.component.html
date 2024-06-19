@@ -1,0 +1,84 @@
+<div class="content">
+    <form class="form-container" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <h2 class="title">Créer un compte Transen</h2>
+  
+      <div>
+        <label>Nom : 
+          <input type="text" placeholder="votre nom...." formControlName="surname">
+        </label>
+        <div class="warningText" *ngIf="userForm.controls['surname'].invalid && isSubmitted">
+            <small style="color: red;">
+            <span *ngIf="userForm.controls['surname'].errors?.['pattern']">Le nom ne doit être composé que de lettres.</span>
+          <span *ngIf="userForm.controls['surname'].errors?.['required']">Le nom de famille est requis.</span>
+            </small>
+        </div>
+      </div>
+  
+      <div>
+        <label>Prénom : 
+          <input type="text" placeholder="votre prénom...." formControlName="name">
+        </label>
+        <div class="warningText" *ngIf="userForm.controls['name'].invalid && isSubmitted">
+            <small style="color: red;">
+            <span *ngIf="userForm.controls['name'].errors?.['pattern']">Le prénom ne doit être composé que de lettres.</span>
+          <span *ngIf="userForm.controls['name'].errors?.['required']">Le prénom est requis.</span>
+        </small>
+        </div>
+      </div>
+  
+      <div>
+        <label>Numéro : 
+          <input type="number" placeholder="votre numéro...." formControlName="number">
+        </label>
+        <div class="warningText" *ngIf="userForm.controls['number'].invalid && isSubmitted">
+            <small style="color: red;">
+           <!--  <span *ngIf="userForm.controls['number'].errors?.['pattern']">Le numéro doit être composé de 9 à 12 chiffres.</span> -->
+          <span *ngIf="userForm.controls['number'].errors?.['minlength']">Le numéro est trop court.</span>
+          <span *ngIf="userForm.controls['number'].errors?.['maxlength']">Le numéro est trop long.</span>
+          <span *ngIf="userForm.controls['number'].errors?.['required']">Le numéro de téléphone est requis.</span>
+        </small>
+        </div>
+      </div>
+  
+      <div>
+        <label>Date de Naissance : 
+          <input type="date" placeholder="votre date de naissance...." formControlName="dateOfBirth">
+        </label>
+        <div class="warningText" *ngIf="userForm.controls['dateOfBirth'].invalid && isSubmitted">
+            <small style="color: red;">
+            <span *ngIf="userForm.controls['dateOfBirth'].errors?.['required']">La date de naissance est requise.</span>
+          <span *ngIf="userForm.controls['dateOfBirth'].errors?.['age']">Vous devez avoir au moins 18 ans.</span>
+        </small></div>
+      </div>
+  
+      <div class="choix">
+        <label>Type de compte : 
+          <select name="typeDeCompte" id="typeDeCompte" formControlName="typeDeCompte">
+            <option value="orangeMoney">Orange Money</option>
+            <option value="wave">Wave</option>
+          </select>
+        </label>
+        <div class="warningText" *ngIf="userForm.controls['typeDeCompte'].invalid && isSubmitted">
+            <small style="color: red;">
+            <span *ngIf="userForm.controls['typeDeCompte'].errors?.['required']">Le type de compte est requis.</span>
+            </small>
+        </div>
+      </div>
+  
+      <div>
+        <label>Password :
+          <input type="password" placeholder="votre nouveau mot de passe...." formControlName="password">
+        </label>
+        <div class="warningText" *ngIf="userForm.controls['password'].invalid && isSubmitted">
+        <small style="color: red;">
+        <span *ngIf="userForm.controls['password'].errors?.['pattern']">Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.</span>
+        <span *ngIf="userForm.controls['password'].errors?.['minlength']">Le mot de passe est trop court.</span>
+        <span *ngIf="userForm.controls['password'].errors?.['maxlength']">Le mot de passe est trop long.</span>
+        <span *ngIf="userForm.controls['password'].errors?.['required']">Le mot de passe est requis.</span>
+        </small>
+        </div>
+      </div>
+      <button type="submit">Valider l'inscription</button>
+    </form>
+  </div>
+  

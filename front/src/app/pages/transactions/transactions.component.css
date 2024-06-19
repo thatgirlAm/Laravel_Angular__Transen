@@ -5,8 +5,8 @@
   .formulaire {
     border: 1px solid #ccc;
     padding: 20px;
-    margin-bottom: 20px;
-  }
+    margin-bottom: 20px;  
+}
   
   .title {
     font-size: 1.5em;
@@ -29,6 +29,7 @@
   .transaction:hover {
    /*  transform: translateY(-3px); */
     transform: scale(1.2);
+    border-radius: 8px;
   }
   
   .transaction-content {
