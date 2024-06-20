@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
     this.surname = localStorage.getItem('surname');
     this.storedId = localStorage.getItem('id');
     this.id = this.storedId ? parseInt(this.storedId, 10) : null;
-     //this.loadBalance();
+    this.loadBalance();
     this.serverService.balance$.subscribe({
       next: (res) => {
         this.balance = res;

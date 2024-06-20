@@ -1,7 +1,7 @@
 <div class="content">
     <form class="form-container" [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <h2 class="title">Créer un compte Transen</h2>
-  
+      <span (click)="signIn()" class="seConnecter"><h3>Se connecter</h3></span>
       <div>
         <label>Nom : 
           <input type="text" placeholder="votre nom...." formControlName="surname">

@@ -1,0 +1,9 @@
+.seConnecter{
+    text-align: center;
+    color: white;   
+}
+
+.seConnecter:hover{
+    color:black;
+    cursor: pointer;
+}

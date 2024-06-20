@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, model } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
 
@@ -12,9 +12,9 @@ import { Observable, catchError, map, of } from 'rxjs';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent //implements OnInit 
+export class SettingsComponent implements OnInit 
 {
-  settingsForm: FormGroup;
+  settingsForm!: FormGroup;
   settings: Settings | null = null;
   idToString:string| null = localStorage.getItem('id');
   id: number = this.idToString? parseInt(this.idToString) : 0 ; 
@@ -22,6 +22,7 @@ export class SettingsComponent //implements OnInit
   surname:string |null = localStorage.getItem('surname') ? localStorage.getItem('surname') : null;
   number:string |null = localStorage.getItem('number') ? localStorage.getItem('number') : null;
   typeDeCompte:string |null = localStorage.getItem('typeDeCompte') ? localStorage.getItem('typeDeCompte') : null;
+  modalIsOpened : boolean = false;
 
 
   constructor(private fb: FormBuilder, private router: Router, private http:HttpClient) {}
@@ -31,29 +32,35 @@ export class SettingsComponent //implements OnInit
     this.loadSettings();
   }
 
+  openModal(){
+    this.modalIsOpened = !this.modalIsOpened;
+  }
+
   initForm(): void {
+    if(!this.modalIsOpened){
     this.settingsForm = this.fb.group({
-      name: [''],
-      surname: [''],
-      number: [''],
-      typeDeCompte: ['']
-    });
+      NewName: [this.name],
+      NewSurname: [this.surname],
+      number: [this.number],
+      typeDeCompte: [this.typeDeCompte]
+    });}
   }
 
   loadSettings(): void {
+    if(!this.modalIsOpened){
     this.settings = {
-      name: localStorage.getItem('name') || '',
-      surname: localStorage.getItem('surname') || '',
+      NewName: localStorage.getItem('name') || '',
+      NewSurname: localStorage.getItem('surname') || '',
       number: localStorage.getItem('number') || '',
       createdAt: new Date(),
-      typeDeCompte: localStorage.getItem('typeDeCompte')||'' 
+      typeDeCompte: localStorage.getItem('typeDeCompte')||'' }
     };
   }
 
   updateSettings(): void {
-    if (this.settingsForm.valid) {
+    if (this.settingsForm.valid && this.modalIsOpened) {
       const updatedSettings = this.settingsForm.value;
-      this.http.put(`http://127.0.0.1:8000/api/users`, updatedSettings).subscribe({ next: (res:any) => {
+      this.http.put(`http://127.0.0.1:8000/api/users/${this.id}`, updatedSettings).subscribe({ next: (res:any) => {
         localStorage.setItem('name', res.data.name);
         localStorage.setItem('surname', res.data.surname);
         alert('Données mises à jour');
@@ -69,7 +76,8 @@ export class SettingsComponent //implements OnInit
   }
 
   showPassWordChange(){
-  }
+    this.modalIsOpened = true;  
+  } 
 
   demandeMdp(): Observable<boolean> {
     const password = prompt('Veuillez entrer votre mot de passe pour confirmer : ');
@@ -85,7 +93,7 @@ export class SettingsComponent //implements OnInit
 ;        return res.status;
       }),
       catchError((error) => {
-        console.error('Error during password confirmation:', error);
+        console.error('Erreur durant la confirmation du mot de passe : ', error);
         return of(false);
       })
     );
@@ -94,11 +102,12 @@ export class SettingsComponent //implements OnInit
     alert("Veuillez vous rapprocher d'une boutique Transen pour changer de numéro.");
     this.router.navigate(['settings']);
   }
+
 }
 
 interface Settings {
-  name: string;
-  surname: string;
+  NewName: string;
+  NewSurname: string;
   number: string;
   createdAt: Date;
   typeDeCompte:string; 

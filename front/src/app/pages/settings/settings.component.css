@@ -15,3 +15,26 @@ ul{
 
     margin-top: 5px;
 }
+.titreh3{
+    text-align: center;
+}
+
+.input{
+    color: brown;
+}
+
+.intouchable:hover{
+    cursor:not-allowed;
+}
+
+.buttonPassword{
+    margin-left: 20%; 
+    background-color: azure; 
+    color:black; 
+    border-color: black; 
+    border-width: 50px;
+}
+
+/* #myModal{
+    display: none;
+} */

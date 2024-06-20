@@ -166,3 +166,13 @@ footer a {
   margin-top: 9px;
 }
 
+
+.Inscription{
+	color:#F9F6EE;
+}
+
+.Inscription:hover{
+
+	color: black;
+	cursor: pointer;
+}

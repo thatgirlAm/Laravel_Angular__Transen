@@ -194,3 +194,9 @@ body{
     box-shadow: 0 0 5px rgba(86, 162, 142, 0.5);
     outline: none;
 }
+
+.button{
+    margin-left: 20%;
+    margin-right: 30%;
+
+}

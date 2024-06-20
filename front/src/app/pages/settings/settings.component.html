@@ -1,36 +1,40 @@
-<!-- <div class="content">
+ <div class="content">
     <div class="formulaire">
 <fieldset class="infos">
+  <h3 class="titreh3">Mes informations</h3>
             <ul>
                 <li>
                   <label><p>Prénom :
-                  {{name}}</p></label>
+                  <i class="input">{{name}}</i></p></label>
                 </li>
                 <li>
                     <label><p> Nom :
-                    {{surname}}</p></label>
+                   <i class="input">{{surname}}</i></p></label>
                   </li>
                   <li>
                     <label><p>Type de compte :
-                    {{typeDeCompte}}</p></label>
+                    <i class="input">{{typeDeCompte}}</i></p></label>
                   </li>
                   <li>
                     <label><p>Numéro :
-                    {{number}}</p></label>
-                  </li>            
+                    <i class="input">{{number}}</i></p></label>
+                  </li>   
+                  <li><button (click)="openModal()" type="button" class="button"><div *ngIf="!modalIsOpened">Modifier mes informations</div><div *ngIf="modalIsOpened">Fermer le champ</div></button>
+                  </li>         
                 </ul>
 </fieldset>
 <div class="_infos">
-<div class="infos"> 
+<div class="infos" id="myModal" *ngIf="modalIsOpened"> 
     <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()" action="POST">
+      <h3 class="titreh3">Mettre mes informations à jour</h3>
               <ul>
                 <li>
-                  <label for="newName">Prénom :</label>
-                  <input type="string" id="newName" formControlName="newName" placeholder={{settings?.name}}>
+                  <label for="name">Prénom :</label>
+                  <input type="string" id="NewName" formControlName="NewName" placeholder={{settings?.NewName}}>
                 </li>
                 <li>
-                    <label for="newSurname">Nom :</label>
-                    <input type="string" id="newSurname" formControlName="newSurName" placeholder={{settings?.surname}}>
+                    <label for="surname">Nom :</label>
+                    <input type="string" id="NewSurname" formControlName="NewSurname" placeholder={{settings?.NewSurname}}>
                   </li>
                   <li>
                     <label for="typeDeCompte">Type de compte :</label>
@@ -38,12 +42,11 @@
                   </li>
                   <li>
                     <label for="number">Number :</label>
-                    <input type="string" id="number" formControlName="number" placeholder={{settings?.number}}>
-                  </li>
-                  <li>
-                    <button type="button" onclick="formulaire()">changer des données</button>
-                  </li>
-                  <li><button type="submit">Valider les changements</button>
+                    <input class="intouchable" type="string" id="number" formControlName="number" placeholder={{settings?.number}} readonly style="background-color: grey;">
+                    
+                  </li><button type="button" style="background-color: brown; margin-left: 70%;" (click)="numberChange()">Changer mon numéro</button>
+                 <li><button type="button" class="buttonPassword" (click)="passwordChange()">Changer mon mot de passe </button></li>
+                  <li><button type="submit" class="button">Valider les changements</button>
         </li></ul>
     </form>
-</div></div></div> -->
+</div></div></div> 

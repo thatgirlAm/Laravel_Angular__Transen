@@ -27,9 +27,11 @@ interface Transaction {
 export class TransactionsComponent implements OnInit {
   
   transactions: Transaction[] = [];
+  transactionsActives : Transaction[] = [];
   id: number | null;
   name: string | null = localStorage.getItem('name');
   surname: string | null = localStorage.getItem('surname');
+  isLoaded : boolean = true;
 
   constructor(private transactionService: TransactionService, private serverService : ServerServiceService, private router: Router, private _http: HttpClient) {
     const storedId = localStorage.getItem('id');
@@ -38,18 +40,31 @@ export class TransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.showHistory();
+    this.LoadTransactionsActives();
+    
+  }
+
+  LoadTransactionsActives(){
+    console.log(this.transactionsActives);
+    
   }
 
   showHistory(): void {
+    this.isLoaded = false;
     if (this.id) {
       this.transactionService.getTransactionHistory(this.id)
         .subscribe({
           next: (res) => {
             this.transactions = res.data;
+            this.transactionsActives = this.transactions.filter(transaction => !transaction.reversed);            
             this.transactions.sort((a, b) => (a.id > b.id ? -1 : 1));
           },
           error: (error) => {
+            this.isLoaded= true ; 
             console.error("Erreur lors du chargement de l'historique", error);
+          }, 
+          complete: ()=>{
+            this.isLoaded = true;
           }
         });
     } else {
@@ -58,6 +73,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   demandeMdp(): Observable<boolean> {
+    this.isLoaded = false ; 
     const password = prompt('Veuillez entrer votre mot de passe pour confirmer : ');
    if(!password){
     return of(false);
@@ -72,6 +88,7 @@ export class TransactionsComponent implements OnInit {
       }),
       catchError((error) => {
         console.error('Erreur lors de la confirmation du mot de passe.', error);
+        this.isLoaded = true ; 
         return of(false); 
       })
     );
@@ -112,6 +129,7 @@ export class TransactionsComponent implements OnInit {
       }
       localStorage.removeItem('mdpReponse');
     });
+    this.isLoaded = false ; 
   }
   
 

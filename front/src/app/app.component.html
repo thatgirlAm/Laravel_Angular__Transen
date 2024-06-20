@@ -5,7 +5,8 @@
     <app-header (nchange)="validateTransaction()"/></ng-container>
     </ng-container>
   </div>
-    <div>
+<div *ngIf="!isLoaded()"></div>
+    <div *ngIf="isLoaded()">
       <router-outlet ngSkipHydration></router-outlet>
     </div>
 </div>

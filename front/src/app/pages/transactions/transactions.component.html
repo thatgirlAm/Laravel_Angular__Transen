@@ -1,8 +1,12 @@
 <div class="content">
     <fieldset class="formulaire">
       <h2 class="title">Historique de mes transferts</h2>
-      <div class="infos">
+      <div class="infos" *ngIf="isLoaded"> 
+        <div class="NoTransaction" *ngIf="transactionsActives.length===0">
+            <h2>Aucune transaction pour l'instant</h2>
+          </div>
         <div *ngFor="let transaction of transactions">
+         
           <div class="transaction" *ngIf="!transaction.reversed">
             <div class="transaction-content">
               <ul class="id_transactions_index">
@@ -22,6 +26,20 @@
               <img *ngIf="transaction.type === 'transfert'" src="https://th.bing.com/th/id/OIP.B-R2R8XXuWb6EtRxt3ad-gHaHa?rs=1&pid=ImgDetMain" alt="Image transfert">
             </div>
           </div>
+        </div>
+      </div>
+      <div class="loader" *ngIf="!isLoaded">
+        <div class="spinner">
+          <div></div>   
+          <div></div>    
+          <div></div>    
+          <div></div>    
+          <div></div>    
+          <div></div>    
+          <div></div>    
+          <div></div>    
+          <div></div>    
+          <div></div>    
         </div>
       </div>
     </fieldset>

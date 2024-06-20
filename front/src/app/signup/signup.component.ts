@@ -29,6 +29,9 @@ export class SignupComponent {
       admin: new FormControl('no') 
     });}
 
+  signIn(){
+    this.router.navigate(['login']);
+  }
   onSubmit(){
 
     this.isSubmitted=true; 

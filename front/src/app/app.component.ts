@@ -9,12 +9,13 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TransactionSucessComponent } from './pages/transaction-sucess/transaction-sucess.component';
 import { ChangeSettingsComponent } from './change-settings/change-settings.component';
+import { LoaderComponent } from './loader/loader.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, DashboardComponent, HeaderComponent, CommonModule, RegisterComponent,ChangeSettingsComponent, TransactionsComponent, TransactionSucessComponent],
+  imports: [RouterOutlet, LoaderComponent, DashboardComponent, HeaderComponent, CommonModule, RegisterComponent,ChangeSettingsComponent, TransactionsComponent, TransactionSucessComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'] ,
   host: { 'ngSkipHydration': '' } //--Résolution de problème en skippant ce phénomène--//
@@ -30,6 +31,10 @@ export class AppComponent  {
   }
   isSignupPage(): boolean {
     return this.router.url === '/signup'; 
+  }
+
+  isLoaded(){
+return true;
   }
 
   validateTransaction(): void {
