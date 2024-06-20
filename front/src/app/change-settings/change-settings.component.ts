@@ -19,7 +19,7 @@ export class ChangeSettingsComponent {
   constructor(public dialogRef: MatDialogRef<ChangeSettingsComponent>){
     this.userForm = new FormGroup({
       newPassword: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(15), Validators.pattern('/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/')]),
-      passworConfirmed: new FormControl('', [Validators.required]),
+      passwordConfirmed: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
     });
   }
@@ -27,6 +27,8 @@ export class ChangeSettingsComponent {
   hiddePasswordSettings(){
     this.dialogRef.close();
   }
+
+
 
   onsubmit(){
     this.isFormSubmetted = true;

@@ -24,7 +24,7 @@ export class SignupComponent {
       surname: new FormControl('',[Validators.pattern('^[A-Za-z- ]+$'), Validators.required]),
       dateOfBirth: new FormControl('', [Validators.required]),
       number: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(13), /* Validators.pattern('^\d') */]),
-      password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(15), Validators.pattern('[a-zA-Z ]*$')]),
+      password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(15), Validators.pattern('/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/')]),
       typeDeCompte: new FormControl('', [Validators.required]),
       admin: new FormControl('no') 
     });}
