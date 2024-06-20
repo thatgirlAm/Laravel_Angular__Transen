@@ -1,0 +1,33 @@
+.overlay{
+    background-color: rgba(0, 0, 0, 0.433);
+    left: 0;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+
+.alignMe{
+    z-index: 1000;
+    position: fixed;
+    height: 50%;
+    width: 50%;
+    top:25%;
+    left: 25%;
+ }
+
+.theWholeThing{
+    display: flex;
+    justify-content: center;
+}
+
+.boutons{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+form{
+    padding: 30px;
+}

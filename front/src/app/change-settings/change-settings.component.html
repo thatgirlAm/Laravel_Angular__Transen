@@ -1,34 +1,31 @@
-<form class="formulaire" action="POST" [formGroup]="userForm">
-    <div class="infos">
-    <div>
-        <label>Nom : 
-        <input type="text" placeholder="votre nom...." formControlName="name"></label>
-    </div>
-    <div>
-        <label>Prénom : 
-        <input type="text" placeholder="votre prénom...." formControlName="surname"></label>
-    </div>
-    <div>
-        <label>Numéro : 
-        <input type="number" placeholder="votre numéro...." formControlName="number"></label>
-    </div>
-    <div>
-        <label>Date de Naissance : 
-        <input type="date" placeholder="votre date de naissance...." formControlName="dateOfBirth"></label>
-    </div>
-    <div>
-        <label>Password </label>
-        <input type="text" placeholder="votre nouveau mot de passe...." formControlName="password">
-        
-        <div class="warningText" *ngIf="userForm.controls['password'].invalid && isFormSubmetted"> 
-            <small style="color: red;">
-                <span *ngIf="userForm.controls['password'].errors?.['minlength']">Le mot de passe est trop court</span>
-                <span *ngIf="userForm.controls['password'].errors?.['maxlength']">Le mot de passe est trop long</span>
-                <span *ngIf="userForm.controls['password'].errors?.['pattern']">Le mot de passe est trop court</span>
-                <span *ngIf="userForm.controls['password'].errors?.['required']">Le mot de passe est requis</span>
+<div class="theWholeThing">
+    <div class="overlay"></div>
+    <div class="alignMe"><form action="POST" [formGroup]="userForm">
+        <div class="infos">
+            <div class="modal">
+            <h2>Changement de mot de passe </h2>
+            <ul>
+            <li><div><label for="oldPassword">Votre mot de passe actuel : <input type="password" placeholder="votre mot de passe actuel..."></label></div></li>
+            <li><label>Votre nouveau mot de passe : 
+            <input type="password" placeholder="votre nouveau mot de passe...." formControlName="newPassword"></label></li>
+            <li><label>Confirmez votre nouveau mot de passe : 
+                <input type="password" placeholder="confirmez votre nouveau mot de passe...." formControlName="passwordConfirmed"></label></li>
+                <div class="warningText" *ngIf="userForm.controls['password'].invalid && isFormSubmetted"> 
+                    <small style="color: red;">
+                        <span *ngIf="userForm.controls['passwordConfirmed'].errors?.['required']">Veuillez confirmer le nouveau mot de passe.</span>
+                    </small>
+                </div>
+                <div class="warningText" *ngIf="userForm.controls['newPassword'].invalid && isFormSubmetted"> 
+                <small style="color: red;">
+                    <span *ngIf="userForm.controls['newPassword'].errors?.['minlength']">Le mot de passe est trop court</span>
+                    <span *ngIf="userForm.controls['newPassword'].errors?.['maxlength']">Le mot de passe est trop long</span>
+                    <span *ngIf="userForm.controls['newPassword'].errors?.['pattern']">Le mot de passe est trop court</span>
+                    <span *ngIf="userForm.controls['newPassword'].errors?.['required']">Le mot de passe est requis</span>
 
-            </small>
-        </div>
+                    </small>
+                </div></ul>
+            <div class="boutons"><button type="button" (click)="onsubmit()">Valider</button>
+        <button type="button" class="cancelButton" (click)="hiddePasswordSettings()">Annuler</button></div>
+        </div></div></form>
     </div>
-    <button type="button" (click)="onsubmit()">Valider</button></div>
-</form>
+</div>

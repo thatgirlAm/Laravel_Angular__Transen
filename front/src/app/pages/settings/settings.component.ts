@@ -2,8 +2,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, model } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
+import { ChangeSettingsComponent } from '../../change-settings/change-settings.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-settings',
@@ -25,7 +28,7 @@ export class SettingsComponent implements OnInit
   modalIsOpened : boolean = false;
 
 
-  constructor(private fb: FormBuilder, private router: Router, private http:HttpClient) {}
+  constructor(private fb: FormBuilder, public dialog: MatDialog,private router: Router, private http:HttpClient) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -35,6 +38,8 @@ export class SettingsComponent implements OnInit
   openModal(){
     this.modalIsOpened = !this.modalIsOpened;
   }
+  
+
 
   initForm(): void {
     if(!this.modalIsOpened){
@@ -69,14 +74,17 @@ export class SettingsComponent implements OnInit
   }
 
   passwordChange(){
-    if(this.demandeMdp()){
       this.showPassWordChange();
-    };
- 
+
   }
 
   showPassWordChange(){
-    this.modalIsOpened = true;  
+    const dialogRef = this.dialog.open(ChangeSettingsComponent, {
+      width: '380px'
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+    console.log('The dialog was closed');
+  }); 
   } 
 
   demandeMdp(): Observable<boolean> {
