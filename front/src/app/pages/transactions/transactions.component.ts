@@ -45,7 +45,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   LoadTransactionsActives(){
-    console.log(this.transactionsActives);
+    //console.log(this.transactionsActives);
     
   }
 
@@ -82,7 +82,7 @@ export class TransactionsComponent implements OnInit {
     const userData = { number, password };
     return this._http.post<any>(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`, userData).pipe(
       map((res) => {
-      console.log(res);
+      //console.log(res);
       localStorage.setItem('mdpReponse', res.status);
 ;        return res.status;
       }),
@@ -97,7 +97,7 @@ export class TransactionsComponent implements OnInit {
 
   reverseOperation(idTransaction: number): void {
     const confirmation = confirm(`Vous allez demander le reverse de la transaction numéro : ${idTransaction}`);
-    console.log(localStorage.getItem('mdpReponse'));
+    //console.log(localStorage.getItem('mdpReponse'));
     if (confirmation) {
       if (localStorage.getItem('mdpReponse') === 'true') {
         this._http.delete(`http://127.0.0.1:8000/api/transactions/${idTransaction}`)
@@ -106,26 +106,26 @@ export class TransactionsComponent implements OnInit {
               alert(res.message);
               this.transactions = this.transactions.filter(transaction=>transaction.id!==idTransaction);
               this.serverService.refreshBalance(res.data.amount, 'depot');
-              console.log(this.transactions);
+              //console.log(this.transactions);
             },
             error: (error) => {
               console.error('Error during transaction reversal:', error);
             }
           });
       } else {
-        console.log('reverse échoué');
+        //console.log('reverse échoué');
       }
     }
   }
 
   reverse(idTransaction: number): void {
     this.demandeMdp().subscribe((isPasswordConfirmed) => {
-      console.log(isPasswordConfirmed);
+      //console.log(isPasswordConfirmed);
       if (isPasswordConfirmed) {
         this.reverseOperation(idTransaction);
       } else {
         alert("Mot de passe incorrect");
-        console.log('Mot de passe incorrect ou non confirmé.');
+        //console.log('Mot de passe incorrect ou non confirmé.');
       }
       localStorage.removeItem('mdpReponse');
     });

@@ -64,7 +64,7 @@ export class NewtransactionComponent implements OnInit {
           localStorage.setItem('destChecked', res.status);
           localStorage.setItem('typeDecompteDestTemp', res.data.typeDeCompte);
           localStorage.setItem('destNumber', res.data.number);
-          console.log(localStorage.getItem('idUserDest'))
+          //console.log(localStorage.getItem('idUserDest'))
           if (localStorage.getItem('destChecked') && localStorage.getItem('typeDecompteDestTemp') === localStorage.getItem('typeDeCompte')) {
             this.validateTransaction();
           } else {

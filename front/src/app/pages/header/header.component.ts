@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
     this.serverService.balance$.subscribe({
       next: (res) => {
         this.balance = res;
-        console.log(this.balance);
+        //console.log(this.balance);
         
       }
     }); 

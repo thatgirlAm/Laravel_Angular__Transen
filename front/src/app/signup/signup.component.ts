@@ -37,11 +37,11 @@ export class SignupComponent {
     this.isSubmitted=true; 
     this.userForm.markAllAsTouched();
     this.userForm.valid;
-    console.log(this.userForm);
+    //console.log(this.userForm);
 
     this.authService.register(this.userForm.value).subscribe({
       next : (res:any)=>{
-        console.log(res.status);
+        //console.log(res.status);
       }
     });
     //this.router.navigate(['login']);

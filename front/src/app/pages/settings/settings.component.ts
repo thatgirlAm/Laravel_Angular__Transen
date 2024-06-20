@@ -83,13 +83,13 @@ export class SettingsComponent implements OnInit
     const password = prompt('Veuillez entrer votre mot de passe pour confirmer : ');
     const number = localStorage.getItem('number');
     const userData = { number, password };
-    console.log(userData);
+    //console.log(userData);
     return this.http.post<any>(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`, userData).pipe(
       map((res) => {
-        console.log(res);
+        //console.log(res);
         
         localStorage.setItem('mdpReponse', res.status);
-        console.log(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`);
+        //console.log(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`);
 ;        return res.status;
       }),
       catchError((error) => {
