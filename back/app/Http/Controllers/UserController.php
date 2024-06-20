@@ -165,4 +165,13 @@ if($_Ok){
         return $this->format(['authentification ok', true, true]);
     }
 return $this->formatError("authentification");} 
+
+public function changePassword($password){
+    $user = Auth::user();
+    if ($user){
+        $user->password = bcrypt($password);
+        $user->save();
+        return $this->format(['password changed', true, true]);
+        }
+}
 }

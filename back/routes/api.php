@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('users/history/{id}', [UserController::class, 'showHistory']);
     Route::get('/users/number/{id}', [UserController::class, 'getNumber']);
     Route::post('/users/history/{id}/reverse', [UserController::class, 'confirmPassword']);
+    Route::post('/users/history/{id}/reverse', [UserController::class, 'changePassword']);
     Route::delete('/users/history/reverse/{idTransaction}', [TransactionController::class, 'reverseTransaction']);
     Route::post('/users/newtransaction/{id}', [TransactionController::class, 'newtransaction']);
     Route::get('users/getBalance/{id}', [UserController::class, 'getBalance']);

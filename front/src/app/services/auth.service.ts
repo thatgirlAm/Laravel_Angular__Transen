@@ -49,6 +49,14 @@ export class AuthService {
     );
   }
 
+  checkmdp(number : number, mdp:string )
+  {
+    return this.http.post<any>(`${this.apiUrl}/confirmPassword`, {number, mdp}) ; 
+  }
+
+  changePassword(newPassword : string){
+    return this.http.post<any>(`${this.apiUrl}/changePassword`, {newPassword});
+  }
   checkLogin(): boolean {
     return !!localStorage.getItem('token');
   }
