@@ -13,15 +13,14 @@
             </div>
             <li><label>Votre nouveau mot de passe : 
             <input type="password" placeholder="votre nouveau mot de passe...." formControlName="newPassword"></label></li>
-             <div class="warningText" *ngIf="userForm.controls['newPassword'].invalid && isFormSubmetted"> 
+            <div class="warningText" *ngIf="userForm.controls['newPassword'].invalid && isFormSubmetted"> 
                 <small style="color: red;">
                     <span *ngIf="userForm.controls['newPassword'].errors?.['minlength']">Le mot de passe est trop court.</span>
                     <span *ngIf="userForm.controls['newPassword'].errors?.['maxlength']">Le mot de passe est trop long.</span>
                     <span *ngIf="userForm.controls['newPassword'].errors?.['pattern']">Le mot de passe est trop court.</span>
                     <span *ngIf="userForm.controls['newPassword'].errors?.['required']">Le nouveau mot de passe est requis.</span>
-
-                    </small>
-                </div>
+                </small>
+            </div>
                 
                 <li><label>Confirmez votre nouveau mot de passe : 
                 <input type="password" placeholder="confirmez votre nouveau mot de passe...." formControlName="passwordConfirmed"></label></li>

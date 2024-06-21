@@ -22,7 +22,7 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "number"=> "required|integer",
+            "number"=> "required|sometimes| integer",
             "name"=> "required|string|sometimes",
             "surname"=>"required|string|sometimes",
             "typeDeCompte"=>"required|string|sometimes"

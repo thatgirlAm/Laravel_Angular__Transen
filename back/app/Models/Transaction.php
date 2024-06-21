@@ -18,6 +18,6 @@ class Transaction extends Model
         'idUserExp',
         'idUserDest',
         'type',
-        'idOperator',
+        'idOperator'
     ];
 }
