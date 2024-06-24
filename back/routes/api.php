@@ -12,6 +12,7 @@ Route::post("/register", [AuthController::class, 'register']);
 Route::post("/login", [AuthController::class, 'login']);
 Route::post("/logout", [AuthController::class, 'logout']);
 Route::get('/check', [AuthController::class, 'isLoggedIn']);
+Route::get('/users/show_/{id}', [UserController::class, 'show_']);
 Route::apiResource("/users", UserController::class)->only('store');
 
 //----Routes with Access required---------//

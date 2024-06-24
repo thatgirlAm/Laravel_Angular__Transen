@@ -1,13 +1,19 @@
 export class Transaction{ 
-  
-    id?: number | undefined ;
-    idUserExp?: number| undefined ;
-    idUserDest?: number| undefined ;
-    amount?:number| undefined ;
-    created_at?:Date| undefined ;
-    type?:string| undefined ;
-    reversed?:boolean| undefined ;
-  
+  id?: number ;
+  idUserExp?: number ;
+  idUserDest?: number  ;
+  destName?: string ; 
+  destSurname?: string; 
+  expName?: string; 
+  expSurname?: string; 
+  destNumber?: number;
+  expNumber?: number; 
+  amount?: number;
+  created_at?: Date;
+  type?: string;
+  reversed?: boolean;
+  clicked?: boolean;
+  isDestinaire?: boolean;
 constructor(){}
 
 }

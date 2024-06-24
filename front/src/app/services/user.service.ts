@@ -27,5 +27,8 @@ export class UserService {
   showUser(id : number){
     return this.http.get(`${this.apiUrl}/${id}`);
   }
+  showUser_(id : number){
+    return this.http.get(`${this.apiUrl}/show_/${id}`);
+  }
 
 }

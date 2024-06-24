@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -20,10 +20,13 @@ import { LoaderComponent } from './loader/loader.component';
   styleUrls: ['./app.component.css'] ,
   host: { 'ngSkipHydration': '' } //--Résolution de problème en skippant ce phénomène--//
 })
-export class AppComponent  {
+export class AppComponent  implements OnInit{
   title = 'app';
   constructor(private router: Router) {}
  
+  ngOnInit(): void {
+/*       localStorage.clear();
+ */  }
   
   //--Méthode pour savoir quand faire apparaître de destinataire dans le menu--//
   isLoginPage(): boolean {

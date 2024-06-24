@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Transaction;
 use App\Http\Requests\UserRequest;
+use Psy\Readline\Hoa\Console;
 
 
 class UserController extends Controller
@@ -75,6 +76,17 @@ class UserController extends Controller
         else{ return $this->formatError("User");}
     }
 
+    public function show_(UserRequest $request){
+        $url = explode('/',$request->getPathInfo());
+        $id= end($url);
+        $user = User::find($id);
+        if ($user) {
+            $data = new UserResource($user);
+            return $this->format(['Utilisateur trouvé.', true, $data]);
+        }
+        else{ return $this->formatError("User");}
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -116,7 +128,9 @@ public function showHistory(Request $request){
     $url = explode('/',$request->getPathInfo());
     $id= end($url);
     $user = User::find($id);
-    $transactions = Transaction::where('idUserExp', $user->id)->get();
+    $transactionsExp = Transaction::where('idUserExp', $user->id)->get();
+    $transactionsDest = Transaction::where('idUserDest', $user->id)->get();
+    $transactions = $transactionsExp->merge($transactionsDest);
     if ($transactions){
     return $this->format(['history found',true, $transactions]);
 }

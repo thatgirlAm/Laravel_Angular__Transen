@@ -1,26 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, of, forkJoin } from 'rxjs';
+import { catchError, map, finalize } from 'rxjs/operators';
 import { TransactionService } from '../../services/transaction.service';
 import { HttpClient } from '@angular/common/http';
 import { ServerServiceService } from '../../server-service.service';
 import { UserService } from '../../services/user.service';
+import { PdfManagerService } from '../../pdf-manager.service';
 
 interface Transaction {
   id: number;
   idUserExp: number;
   idUserDest: number;
-  destName : string; 
-  destSurname : string; 
-  destNumber : number;
+  destName?: string; 
+  destSurname?: string; 
+  expName?: string; 
+  expSurname?: string; 
+  destNumber?: number;
+  expNumber?: number; 
   amount: number;
   created_at: Date;
   type: string;
   reversed: boolean;
   clicked?: boolean;
+  isDestinaire?: boolean;
 }
+
+interface ApiResponse<T> {
+  data: T;
+  message: string;
+  status: string;
+}
+
+
 
 @Component({
   selector: 'app-history',
@@ -30,7 +43,7 @@ interface Transaction {
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-  
+
   transactions: Transaction[] = [];
   transactionsActives: Transaction[] = [];
   id: number | null;
@@ -40,60 +53,120 @@ export class TransactionsComponent implements OnInit {
   AtransactionClicked: boolean = false;
   selectedTransaction: Transaction | null = null;
 
-  constructor(private transactionService: TransactionService, private userService: UserService, private serverService: ServerServiceService, private router: Router, private _http: HttpClient) {
+  constructor(
+    private transactionService: TransactionService, 
+    private userService: UserService, 
+    private serverService: ServerServiceService, 
+    private router: Router, 
+    private _http: HttpClient,
+    private pdfManager : PdfManagerService 
+  ) {
     const storedId = localStorage.getItem('id');
     this.id = storedId ? parseInt(storedId, 10) : null;
   }
 
   ngOnInit(): void {
     this.showHistory();
-    this.LoadTransactionsActives();
-  }
-
-  LoadTransactionsActives() {
-    //console.log(this.transactionsActives);
   }
 
   showHistory(): void {
     this.isLoaded = false;
     if (this.id) {
-      this.transactionService.getTransactionHistory(this.id)
-        .subscribe({
-          next: (res) => {
-            this.transactions = res.data.map((transaction: any) => ({ ...transaction, clicked: false }));
-            this.transactionsActives = this.transactions.filter(transaction => !transaction.reversed);
-            this.transactions.sort((a, b) => (a.id > b.id ? -1 : 1));
-          },
-          error: (error) => {
-            this.isLoaded = true;
-            console.error("Erreur lors du chargement de l'historique", error);
-          },
-          complete: () => {
-            this.isLoaded = true;
-            this.loadDest(this.transactions); 
-          }
-        });
+      this.transactionService.getTransactionHistory(this.id).subscribe({
+        next: (res: ApiResponse<Transaction[]>) => {
+          this.transactions = res.data.map(transaction => ({
+            ...transaction,
+            clicked: false,
+            isDestinaire: localStorage.getItem('id') === String(transaction.idUserDest)
+          }));
+          this.transactionsActives = this.transactions.filter(transaction => !transaction.reversed);
+          this.transactions.sort((a, b) => b.id - a.id);
+        },
+        error: (error) => {
+          console.error("Erreur lors du chargement de l'historique", error);
+          alert("Erreur lors du chargement de l'historique");
+        },
+        complete: () => {
+          this.loadDestUsers(this.transactions);
+          this.loadExpUsers(this.transactions);
+        }
+      });
     } else {
       console.error("Pas d'id utilisateur trouvé");
+      alert("Pas d'id utilisateur trouvé");
     }
   }
-  loadDest(transaction : Transaction[]){
-    console.log('enclenché');
-    if(transaction){
-      this.transactions.forEach(transaction => {
-        this.userService.showUser(transaction.idUserDest).subscribe({
-          next: (res: any) => {
-            transaction.destName = res.data.name;
-            transaction.destSurname = res.data.surname;
-            transaction.destNumber = res.data.number;
-          },
-          error: (err) => {
-            console.error('Error fetching user data:', err);
+
+  loadDestUsers(transactions: Transaction[]): void {
+    this.isLoaded = false;
+
+    const destRequests = transactions.map(transaction =>
+      this.userService.showUser_(transaction.idUserDest).pipe(
+        map((res: any) => ({ id: transaction.id, dest: res.data })),
+        catchError(error => {
+          console.error('Erreur lors du chargement du destinataire', error);
+          return of(null);
+        })
+      )
+    );
+
+    forkJoin(destRequests).subscribe({
+      next: (results) => {
+        results.forEach(result => {
+          if (result) {
+            const transaction = this.transactions.find(t => t.id === result.id);
+            if (transaction) {
+              transaction.destName = result.dest.name;
+              transaction.destSurname = result.dest.surname;
+              transaction.destNumber = result.dest.number;
+            }
           }
-        });        
-      });
-      
-    }
+        });
+      },
+      error: (error) => {
+        console.error("Erreur lors du chargement des destinataires", error);
+        alert("Erreur lors du chargement des destinataires");
+      },
+      complete: () => {
+        this.isLoaded = true;
+      }
+    });
+  }
+
+  loadExpUsers(transactions: Transaction[]): void {
+    this.isLoaded = false;
+
+    const expRequests = transactions.map(transaction =>
+      this.userService.showUser_(transaction.idUserExp).pipe(
+        map((res: any) => ({ id: transaction.id, exp: res.data })),
+        catchError(error => {
+          console.error("Erreur lors du chargement de l'expéditeur", error);
+          return of(null);
+        })
+      )
+    );
+
+    forkJoin(expRequests).subscribe({
+      next: (results) => {
+        results.forEach(result => {
+          if (result) {
+            const transaction = this.transactions.find(t => t.id === result.id);
+            if (transaction) {
+              transaction.expName = result.exp.name;
+              transaction.expSurname = result.exp.surname;
+              transaction.expNumber = result.exp.number;
+            }
+          }
+        });
+      },
+      error: (error) => {
+        console.error("Erreur lors du chargement des expéditeurs", error);
+        alert("Erreur lors du chargement des expéditeurs");
+      },
+      complete: () => {
+        this.isLoaded = true;
+      }
+    });
   }
 
   demandeMdp(): Observable<boolean> {
@@ -106,7 +179,6 @@ export class TransactionsComponent implements OnInit {
     const userData = { number, password };
     return this._http.post<any>(`http://127.0.0.1:8000/api/users/history/${this.id}/reverse`, userData).pipe(
       map((res) => {
-        //console.log(res);
         localStorage.setItem('mdpReponse', res.status);
         return res.status;
       }),
@@ -120,7 +192,6 @@ export class TransactionsComponent implements OnInit {
 
   reverseOperation(idTransaction: number): void {
     const confirmation = confirm(`Vous allez demander le reverse de la transaction numéro : ${idTransaction}`);
-    //console.log(localStorage.getItem('mdpReponse'));
     if (confirmation) {
       if (localStorage.getItem('mdpReponse') === 'true') {
         this._http.delete(`http://127.0.0.1:8000/api/transactions/${idTransaction}`)
@@ -129,26 +200,21 @@ export class TransactionsComponent implements OnInit {
               alert(res.message);
               this.transactions = this.transactions.filter(transaction => transaction.id !== idTransaction);
               this.serverService.refreshBalance(res.data.amount, 'depot');
-              //console.log(this.transactions);
             },
             error: (error) => {
               console.error("Erreur lors de l'opération", error);
             }
           });
-      } else {
-        //console.log('reverse échoué');
       }
     }
   }
 
   reverse(idTransaction: number): void {
     this.demandeMdp().subscribe((isPasswordConfirmed) => {
-      //console.log(isPasswordConfirmed);
       if (isPasswordConfirmed) {
         this.reverseOperation(idTransaction);
       } else {
         alert("Mot de passe incorrect");
-        //console.log('Mot de passe incorrect ou non confirmé.');
       }
       localStorage.removeItem('mdpReponse');
     });
@@ -165,7 +231,9 @@ export class TransactionsComponent implements OnInit {
     this.selectedTransaction = null;
   }
 
-  lookforDest(id: number): void {
-    
+  lookforDest(id: number): void {}
+
+  ReceiptDownload(transaction:Transaction){
+    this.pdfManager.generateReceipt(transaction);
   }
 }
