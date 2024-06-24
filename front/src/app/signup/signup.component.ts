@@ -14,6 +14,7 @@ import { SignUp } from '../pages/sign-up';
   styleUrl: './signup.component.css'
 })
 export class SignupComponent {
+  imagePath : string = "../images/logo.png" ;
   signUpObj : SignUp = new SignUp() ; 
   userForm: FormGroup; 
   isSubmitted : boolean = false ; 

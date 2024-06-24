@@ -115,7 +115,7 @@ export class TransactionsComponent implements OnInit {
         results.forEach(result => {
           if (result) {
             const transaction = this.transactions.find(t => t.id === result.id);
-            if (transaction) {
+            if (transaction && transaction.type =="transfert") {
               transaction.destName = result.dest.name;
               transaction.destSurname = result.dest.surname;
               transaction.destNumber = result.dest.number;

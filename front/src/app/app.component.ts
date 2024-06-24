@@ -25,8 +25,8 @@ export class AppComponent  implements OnInit{
   constructor(private router: Router) {}
  
   ngOnInit(): void {
-/*       localStorage.clear();
- */  }
+       localStorage.clear();
+  }
   
   //--Méthode pour savoir quand faire apparaître de destinataire dans le menu--//
   isLoginPage(): boolean {

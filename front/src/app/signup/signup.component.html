@@ -1,6 +1,9 @@
 <div class="content">
     <form class="form-container" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <h2 class="title">Créer un compte Transen</h2>
+       <!-- <img src="../images/logo.png" alt="LOGO">  -->
+       <div class="image">
+       <img alt="" src = "./assets/logo.png" width="250px"/> 
+      </div><h2 class="title">Créer un compte Transen</h2>
       <span (click)="signIn()" class="seConnecter"><h3>Se connecter</h3></span>
       <div>
         <label>Nom : 

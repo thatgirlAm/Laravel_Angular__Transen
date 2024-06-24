@@ -14,6 +14,7 @@ Route::post("/logout", [AuthController::class, 'logout']);
 Route::get('/check', [AuthController::class, 'isLoggedIn']);
 Route::get('/users/show_/{id}', [UserController::class, 'show_']);
 Route::apiResource("/users", UserController::class)->only('store');
+Route::get('/images/logo.png', [TransactionController::class, 'showLogo']);
 
 //----Routes with Access required---------//
 Route::middleware('auth:sanctum')->group(function(){

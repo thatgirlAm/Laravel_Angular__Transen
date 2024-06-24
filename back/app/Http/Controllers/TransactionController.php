@@ -191,4 +191,8 @@ class TransactionController extends Controller
         return $this->format(['result', true, $transactionRequest]);
         //$this->update($transactionRequest,Transaction::find($request->id) );
     }
+
+    public function showLogo(){
+        return $this->format(['ok', true, 'C:\Users\amaelle.diop\laravel\projetTest\front\src\app\images\logo.png']);
+    }
 }
