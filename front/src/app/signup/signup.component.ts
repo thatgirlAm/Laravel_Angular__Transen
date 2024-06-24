@@ -43,7 +43,7 @@ export class SignupComponent {
 
     this.authService.register(this.userForm.value).subscribe({
       next : (res:any)=>{
-        //console.log(res.status);
+        
       }
     });
     //this.router.navigate(['login']);

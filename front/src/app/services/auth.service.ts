@@ -21,6 +21,9 @@ export class AuthService {
           alert('Compte créé ! Vous pouvez désormais vous connecter.')
           this.router.navigate(['login']);
         }
+        else{
+          alert(res.message); 
+        }
       })
     );
   }
@@ -30,6 +33,9 @@ export class AuthService {
         if (res.token) {
           localStorage.setItem('token', res.token);
           
+        }
+        else{
+          alert(res.message);
         }
       })
     );
