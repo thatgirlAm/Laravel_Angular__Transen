@@ -9,6 +9,7 @@ export const AntiAuthGuard: CanActivateFn = (route, state) => {
 
     if(auth.checkLogin()) {
         router.navigateByUrl('/dashboard');
+        alert('Action non authorisée.');
         //console.log('Access denied');
         return false;
     }
