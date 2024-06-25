@@ -1,0 +1,15 @@
+<header id="header">
+	<div class="menu">
+	<nav class="links" style="--items: 4;">
+		<button (click)="redirectHistory()">Historique des transactions</button>
+		<button (click)="showParameters()">Paramètres</button>
+		<button  (click)="putNewTransaction()">Nouvelle transaction</button>
+		<button (click)="logOut()">Log Out</button>
+		<span class="line"></span>
+	</nav>
+	<div class="welcome">
+		<h4>{{this.name}} {{this.surname}}</h4>
+		<h5>Solde : {{this.balance | number }} XOF</h5>
+	</div></div>
+</header>
+

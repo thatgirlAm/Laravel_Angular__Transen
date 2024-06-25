@@ -1,0 +1,72 @@
+<div class="content">
+  <fieldset class="formulaire">
+    <h2 class="title">Historique de mes transferts</h2>
+    <div class="infos" *ngIf="isLoaded">
+      <div class="NoTransaction" *ngIf="transactionsActives.length === 0">
+        <h2>Aucune transaction pour l'instant</h2>
+      </div>
+      <div *ngFor="let transaction of transactions">
+        <div class="transaction" *ngIf="!transaction.reversed" (click)="transactionClickedFunc(transaction)">
+          <div class="transaction-content">
+            <ul class="id_transactions_index">
+              <li><strong>{{ transaction.type | titlecase }}</strong></li>
+              <li *ngIf="transaction.type=='retrait' ||  transaction.type=='transfert' && !transaction.isDestinaire"><strong style="color: red;"> - {{ transaction.amount | number }} XOF</strong> </li>
+              <li *ngIf="transaction.type=='depot' ||  transaction.type=='transfert' && transaction.isDestinaire"><strong style="color: green;"> + {{ transaction.amount | number }} XOF</strong> </li>
+              <li *ngIf="transaction.type === 'transfert' && transaction.isDestinaire==true"><strong>Expéditeur:</strong> {{ transaction.expName | titlecase}} {{ transaction.expSurname | titlecase}}</li>
+              <li *ngIf="transaction.type === 'transfert' && transaction.isDestinaire==false"><strong>Destinataire:</strong> {{ transaction.destName | titlecase}} {{ transaction.destSurname | titlecase}}</li>
+              <li *ngIf="transaction.type === 'transfert' && !transaction.isDestinaire">
+                <button type="button" (click)="reverse(transaction.id)">Reverse</button>
+              </li>
+            </ul>
+          </div>
+          <div class="transaction-image">
+            <img *ngIf="transaction.type === 'retrait'" src="https://th.bing.com/th/id/OIP.UX0TQzhqOfgSTZAlumimAwHaHa?rs=1&pid=ImgDetMain" alt="Image retrait">
+            <img *ngIf="transaction.type === 'depot'" src="https://static.vecteezy.com/system/resources/previews/016/742/074/non_2x/line-icon-for-cheapest-vector.jpg" alt="Image dépôt">
+            <img *ngIf="transaction.type === 'transfert'" src="https://th.bing.com/th/id/OIP.B-R2R8XXuWb6EtRxt3ad-gHaHa?rs=1&pid=ImgDetMain" alt="Image transfert">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="loader" *ngIf="!isLoaded">
+      <div class="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div *ngIf="selectedTransaction" class="overlay" (click)="closeOverlay()">
+    <button class="pdfButton" (click)="ReceiptDownload(selectedTransaction)">
+      <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+      <span class="icon2"></span>
+      <span class="tooltip">Download</span>
+   </button>
+    <button class="button" (click)="closeOverlay()">
+      <span class="X"></span>
+      <span class="Y"></span>
+    </button>
+    <div class="transactionModal" (click)="$event.stopPropagation()">
+      <h2>Reçu de l'opération {{selectedTransaction.id}}</h2>
+      <ul class="transactionDetails">
+        <li><strong>Id opération:</strong><i class="infosCLient"> {{ selectedTransaction.id }}</i></li>
+        <li><strong>Montant:</strong><i class="infosCLient"> {{ selectedTransaction.amount | number }} XOF</i></li>
+        <li><strong>Date:</strong> <i class="infosCLient">{{ selectedTransaction.created_at | date:'longDate' }}</i></li>
+        <li><strong>Type:</strong> <i class="infosCLient">{{ selectedTransaction.type }}</i></li>
+        <li *ngIf="selectedTransaction.type === 'transfert'"><strong>Destinataire:</strong> <i class="infosCLient">{{ selectedTransaction.destName | titlecase}} {{ selectedTransaction.destSurname | titlecase}} </i></li>
+        <li *ngIf="selectedTransaction.type === 'transfert'"><strong>Numéro destinataire:</strong> <i class="infosCLient">{{selectedTransaction.destNumber}} </i></li>
+        <li *ngIf="selectedTransaction.type === 'transfert'"><strong>Expéditeur:</strong><i class="infosCLient">{{ selectedTransaction.expName | titlecase}} {{ selectedTransaction.expSurname | titlecase}}</i> </li>
+        <li *ngIf="selectedTransaction.type === 'transfert'"><strong>Numéro expéditeur:</strong><i class="infosCLient"> {{selectedTransaction.destNumber}}</i></li>
+        
+      </ul>
+    
+    </div>
+  </div>
+</div>
