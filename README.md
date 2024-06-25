@@ -98,7 +98,7 @@ Instances: Instances are specific objects created from a class. When you instant
 
 Modals are small windows that appear the the page when it comes to alerting someone or to fill a form. 
 
-## <i>You really though it went on that smooth ?? You fool ! < a href="https://www.youtube.com/shorts/REpLy96R2CQ?feature=share">"Tous les jours qu'on dors qu'on se reveille, y a des nouveaux dossiers"</a> </i> : problems.
+## <i>You really though it went on that smooth ?? You fool ! <a href="https://www.youtube.com/shorts/REpLy96R2CQ?feature=share">"Tous les jours qu'on dors qu'on se reveille, y a des nouveaux dossiers"</a> </i> : problems.
 
 We've had many many bugs (sinon c'est pas drôle ;) ) and I've learned a lotf rom them...
 
