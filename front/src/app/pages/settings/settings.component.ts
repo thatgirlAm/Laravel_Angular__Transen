@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
 import { ChangeSettingsComponent } from '../../change-settings/change-settings.component';
 import { MatDialog } from '@angular/material/dialog';
+import { inject } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-settings',
@@ -17,6 +19,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class SettingsComponent implements OnInit 
 {
+  isloaded : boolean = false ; 
+  toastr = inject(ToastrService);
   settingsForm!: FormGroup;
   settings: Settings | null = null;
   idToString:string| null = localStorage.getItem('id');
@@ -63,15 +67,32 @@ export class SettingsComponent implements OnInit
   }
 
   updateSettings(): void {
+    this.isloaded = false ;
     if (this.settingsForm.valid && this.modalIsOpened) {
-      const updatedSettings = this.settingsForm.value;
+      const updatedSettings = {
+        'name' : this.settingsForm.get('NewName')?.value,
+        'surname' : this.settingsForm.get('NewSurname')?.value,
+        'typeDeCompte': this.settingsForm.get('typeDeCompte')?.value
+      }
+
+      console.log(updatedSettings);
+      
       this.http.put(`http://127.0.0.1:8000/api/users/${this.id}`, updatedSettings).subscribe({ next: (res:any) => {
         localStorage.setItem('name', res.data.name);
         localStorage.setItem('surname', res.data.surname);
-        alert('Données mises à jour');
         this.router.navigate(['settings']);}});
+        this.loadSettings();
+        this.router.navigate([]);
+        this.toastr.success('Données mises à jour');
+
+    error: (error : any )=>{
+      this.toastr.error('Erreur','Une erreur est survenue lors du changement.');
     }
-  }
+    complete: ()=>
+    {
+      this.toastr.success('Données mises à jour');
+    }
+  }}
 
   passwordChange(){
       this.showPassWordChange();
@@ -107,7 +128,7 @@ export class SettingsComponent implements OnInit
     );
   }
   numberChange(): void {
-    alert("Veuillez vous rapprocher d'une boutique Transen pour changer de numéro.");
+    this.toastr.warning("Veuillez vous rapprocher d'une boutique Transen pour changer de numéro.");
     this.router.navigate(['settings']);
   }
 

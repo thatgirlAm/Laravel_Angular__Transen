@@ -4,13 +4,15 @@ import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Login } from '../pages/log-in';
 import { SignUp } from '../pages/sign-up';
+import { ToastrService } from 'ngx-toastr';
+import { inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000/api';
-  
+  toastr= inject(ToastrService);
   constructor(private http: HttpClient, private router: Router) {}
 
   register(registerForm : SignUp){
@@ -18,11 +20,11 @@ export class AuthService {
       tap(res => {
         console.log(res);
         if(res.status){
-          alert('Compte créé ! Vous pouvez désormais vous connecter.')
+          this.toastr.success('Compte créé ! Vous pouvez désormais vous connecter.')
           this.router.navigate(['login']);
         }
         else{
-          alert(res.message); 
+          this.toastr.error(res.message); 
         }
       })
     );
@@ -34,9 +36,7 @@ export class AuthService {
           localStorage.setItem('token', res.token);
           
         }
-        else{
-          alert(res.message);
-        }
+
       })
     );
   }

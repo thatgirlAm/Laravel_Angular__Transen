@@ -8,5 +8,12 @@
         <input type="number" [(ngModel)]="loginObj.number" name="number" placeholder="77*******"/>
   <label for="labelPassword" class="labels">Votre mot de passe : </label>
         <input class="password" [(ngModel)]="loginObj.password" type="password" name="password" placeholder="············"/>
-        <button type="button" (click)="onLogin()">Se connecter</button>
+        <button type="button" *ngIf="isloaded" (click)="onLogin()">Se connecter</button>
+
+        <div *ngIf="!isloaded">
+            <div class="loader">
+                  <div class="loader-text">Loading...</div>
+                  <div class="loader-bar"></div>
+                </div>                
+        </div>
     </form>

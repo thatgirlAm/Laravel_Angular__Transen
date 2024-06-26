@@ -6,9 +6,9 @@
             <h2>Changement de mot de passe </h2>
             <ul>
             <li><div><label for="oldPassword">Votre mot de passe actuel : <input type="password" placeholder="votre mot de passe actuel..."></label></div></li>
-            <div class="warningText" *ngIf="userForm.controls['password'].invalid && isFormSubmetted"> 
+            <div class="warningText" *ngIf="userForm.controls['oldPassword'].invalid && isFormSubmetted"> 
                 <small style="color: red;">
-                    <span *ngIf="userForm.controls['password'].errors?.['required']">Votre ancien mot de passe est requis.</span>
+                    <span *ngIf="userForm.controls['oldPassword'].errors?.['required']">Votre ancien mot de passe est requis.</span>
                 </small>
             </div>
             <li><label>Votre nouveau mot de passe : 

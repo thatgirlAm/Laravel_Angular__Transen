@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
 import { SignUp } from '../pages/sign-up';
+import { ToastrService } from 'ngx-toastr';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-signup',
@@ -18,6 +20,7 @@ export class SignupComponent {
   signUpObj : SignUp = new SignUp() ; 
   userForm: FormGroup; 
   isSubmitted : boolean = false ; 
+  toastr = inject(ToastrService); 
 
   constructor(private router:Router, private authService:AuthService , private http: HttpClient){
     this.userForm = new FormGroup({
@@ -42,8 +45,14 @@ export class SignupComponent {
     //console.log(this.userForm);
 
     this.authService.register(this.userForm.value).subscribe({
-      next : (res:any)=>{
-        
+      next : (res)=>{
+        this.toastr.success("Inscription réussie");
+      },
+      error : (error : any) => {
+        this.toastr.error("Vérifiez vos données","Inscription non valide");
+      },
+      complete:()=>{
+        this.toastr.success("Inscription réussie");
       }
     });
     //this.router.navigate(['login']);

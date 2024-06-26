@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { ServerServiceService } from '../../server-service.service';
 import { UserService } from '../../services/user.service';
 import { PdfManagerService } from '../../pdf-manager.service';
+import { ToastrService } from 'ngx-toastr';
+import { inject } from '@angular/core';
 
 interface Transaction {
   id: number;
@@ -43,7 +45,7 @@ interface ApiResponse<T> {
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-
+  toastr = inject(ToastrService);
   transactions: Transaction[] = [];
   transactionsActives: Transaction[] = [];
   id: number | null;
@@ -83,17 +85,19 @@ export class TransactionsComponent implements OnInit {
           this.transactions.sort((a, b) => b.id - a.id);
         },
         error: (error) => {
+          this.isLoaded = true;
           console.error("Erreur lors du chargement de l'historique", error);
-          alert("Erreur lors du chargement de l'historique");
+          this.toastr.error("Erreur lors du chargement de l'historique");
         },
         complete: () => {
+          this.isLoaded = true;
           this.loadDestUsers(this.transactions);
           this.loadExpUsers(this.transactions);
         }
       });
     } else {
       console.error("Pas d'id utilisateur trouvé");
-      alert("Pas d'id utilisateur trouvé");
+      this.toastr.error("Pas d'id utilisateur trouvé");
     }
   }
 
@@ -125,7 +129,7 @@ export class TransactionsComponent implements OnInit {
       },
       error: (error) => {
         console.error("Erreur lors du chargement des destinataires", error);
-        alert("Erreur lors du chargement des destinataires");
+        this.toastr.error("Erreur lors du chargement des destinataires");
       },
       complete: () => {
         this.isLoaded = true;
@@ -161,7 +165,7 @@ export class TransactionsComponent implements OnInit {
       },
       error: (error) => {
         console.error("Erreur lors du chargement des expéditeurs", error);
-        alert("Erreur lors du chargement des expéditeurs");
+        this.toastr.error("Erreur lors du chargement des expéditeurs");
       },
       complete: () => {
         this.isLoaded = true;
@@ -197,7 +201,7 @@ export class TransactionsComponent implements OnInit {
         this._http.delete(`http://127.0.0.1:8000/api/transactions/${idTransaction}`)
           .subscribe({
             next: (res: any) => {
-              alert(res.message);
+              this.toastr.success(res.message);
               this.transactions = this.transactions.filter(transaction => transaction.id !== idTransaction);
               this.serverService.refreshBalance(res.data.amount, 'depot');
             },
@@ -214,7 +218,7 @@ export class TransactionsComponent implements OnInit {
       if (isPasswordConfirmed) {
         this.reverseOperation(idTransaction);
       } else {
-        alert("Mot de passe incorrect");
+        this.toastr.error("Mot de passe incorrect");
       }
       localStorage.removeItem('mdpReponse');
     });

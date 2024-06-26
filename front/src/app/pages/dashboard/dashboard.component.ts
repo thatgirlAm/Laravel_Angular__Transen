@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TransactionService } from '../../services/transaction.service';
+import { ToastrService } from 'ngx-toastr';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +10,7 @@ import { TransactionService } from '../../services/transaction.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  toastr = inject(ToastrService);
   user: string[] = []; 
   transactions: any[] = [];
   transaction: Transaction = new Transaction(); 

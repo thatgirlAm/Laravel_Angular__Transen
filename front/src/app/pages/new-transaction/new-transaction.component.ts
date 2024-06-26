@@ -6,6 +6,8 @@ import { TransactionService } from '../../services/transaction.service';
 import { HeaderComponent } from '../header/header.component';
 import { UserService } from '../../services/user.service';
 import { ServerServiceService } from '../../server-service.service';
+import { ToastrService } from 'ngx-toastr';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-new-transaction',
@@ -15,6 +17,7 @@ import { ServerServiceService } from '../../server-service.service';
   imports: [ NgIf, ReactiveFormsModule, CommonModule, HeaderComponent]
 })
 export class NewtransactionComponent implements OnInit {
+  toastr = inject(ToastrService);
   storedBalance = localStorage.getItem('balance');
   @Input() balance: number = this.storedBalance ? parseInt(this.storedBalance, 10) : 0;
   @Output() nchange : EventEmitter<number> = new EventEmitter(); 
@@ -71,11 +74,11 @@ export class NewtransactionComponent implements OnInit {
             throw new Error('Les types de comptes ne correspondent pas.');
           }
         } catch (error: any) {
-          alert(error.message);
+          this.toastr.error(error.message);
         }
       },
       error: (error) => {
-        alert("Le destinataire n'existe pas.");
+        this.toastr.error("Le destinataire n'existe pas.");
       }
     });}
 
@@ -83,7 +86,7 @@ export class NewtransactionComponent implements OnInit {
       this.validateTransaction();
     }}
     else{
-      alert("Veuillez remplir tous les champs.");
+      this.toastr.error("Veuillez remplir tous les champs.");
     }
   }
 
@@ -100,7 +103,7 @@ export class NewtransactionComponent implements OnInit {
           this.router.navigate(['transaction-success']);}
         }
       else{
-        alert(res.message);
+        this.toastr.error(res.message);
         this.ngOnInit();
       }
     });

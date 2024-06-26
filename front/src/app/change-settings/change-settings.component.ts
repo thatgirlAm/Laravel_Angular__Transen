@@ -5,6 +5,8 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-change-settings',
@@ -14,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrl: './change-settings.component.css'
 })
 export class ChangeSettingsComponent {
-
+  toastr = inject(ToastrService);
   userForm : FormGroup;
   isFormSubmetted : boolean = false; 
 
@@ -22,7 +24,7 @@ export class ChangeSettingsComponent {
     this.userForm = new FormGroup({
       newPassword: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(15), Validators.pattern('/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/')]),
       passwordConfirmed: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required])
+      oldPassword: new FormControl('', [Validators.required])
     });
   }
 
@@ -44,7 +46,7 @@ export class ChangeSettingsComponent {
         }
       }
       else{
-        alert('Les mots de passe de correspondent pas.');
+        this.toastr.warning('Les mots de passe de correspondent pas.');
         this.router.navigate(['settings']); 
       }
       
